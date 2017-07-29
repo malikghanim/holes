@@ -3,17 +3,31 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
-
 /**
  * Login form
  */
 class LoginForm extends Model
 {
-    public $username;
+    public $email;
     public $password;
     public $rememberMe = true;
-
+    public $first_name;
+    public $last_name;
+    public $company;
+    public $username;
     private $_user;
+    public $verifyCode;
+    public $suspended = false;
+    public $captcha;
+
+    public function behaviors()
+    {
+        return [
+
+        ];
+    }
+
+
 
 
     /**
@@ -22,13 +36,9 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
-        ];
+            [['email', 'password'], 'required'],
+            ['email', 'email'],
+            ['password', 'validatePassword']        ];
     }
 
     /**
@@ -51,7 +61,7 @@ class LoginForm extends Model
     /**
      * Logs in a user using the provided username and password.
      *
-     * @return bool whether the user is logged in successfully
+     * @return boolean whether the user is logged in successfully
      */
     public function login()
     {
@@ -67,10 +77,16 @@ class LoginForm extends Model
      *
      * @return User|null
      */
-    protected function getUser()
-    {
+    protected function getUser() {
+        $this->username = strtolower($this->email);
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = User::findByUsername(strtolower($this->username));
+            if ($this->_user !== Null) {
+                $this->first_name = !is_null($this->_user->first_name) ? $this->_user->first_name : NULL;
+                $this->last_name = !is_null($this->_user->last_name) ? $this->_user->last_name : NULL;
+                $this->_user->ip_address=  !is_null(\common\helpers\IpAddress::get_ip()) ? \common\helpers\IpAddress::get_ip() : NULL;
+                $this->_user->save();
+            }
         }
 
         return $this->_user;

@@ -37,14 +37,13 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'GET country/list/<id:\d+>' => 'country/list/',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
