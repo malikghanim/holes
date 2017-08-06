@@ -317,4 +317,13 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
         $user = static::findByUsername($username);
         return ['user_id' => $user->getId()];
     }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCountry()
+    {
+        return $this->hasOne(Country::className(), ['Code' => 'CountryCode']);
+    }
 }

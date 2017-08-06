@@ -3,7 +3,7 @@ namespace api\controllers;
 
 use Yii;
 
-use yii\rest\Controller;
+use yii\rest\ActiveController;
 use yii\web\Response;
 use common\models\Tokens;
 use common\models\User;
@@ -13,29 +13,12 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use filsh\yii2\oauth2server\filters\ErrorToExceptionFilter;
 
-class MainController extends Controller
+class MainController extends ActiveController
 {
     protected $user;
     public $credentials;
     private $app;
-
-    public function behaviors()
-    {
-        return ArrayHelper::merge(parent::behaviors(), [
-            'authenticator' => [
-                'class' => CompositeAuth::className(),
-                'authMethods' => [
-                    ['class' => HttpBearerAuth::className()],
-                ]
-            ],
-            'exceptionFilter' => [
-                'class' => ErrorToExceptionFilter::className()
-            ],
-            'rateLimiter' => [
-                'enableRateLimitHeaders' => true
-            ]
-        ]);
-    }
+    public $status = 200;
 
     public function beforeAction($event){
         $beforeAction = parent::beforeAction($event);
@@ -45,6 +28,19 @@ class MainController extends Controller
             $this->credentials = $this->user->email. ":". $this->user->password_hash;
         }
         return $beforeAction;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterAction($action, $result) {
+        Yii::$app->response->format = 'json';
+        if (is_array($result) && isset($result['status']))
+            Yii::$app->response->setStatusCode($result['status']);
+        else
+            Yii::$app->response->setStatusCode($this->status);
+        
+        return parent::afterAction($action,$result);
     }
 
     protected function getApp()
