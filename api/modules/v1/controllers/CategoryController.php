@@ -20,6 +20,8 @@ class CategoryController extends MainController
     public $credentials;
     private $app;
 
+    public $modelClass = 'yiimodules\categories\models\Categories';  
+
     public function behaviors()
     {
         return ArrayHelper::merge(parent::behaviors(), [
