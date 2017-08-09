@@ -22,6 +22,16 @@ class CategoryController extends MainController
 
     public $modelClass = 'yiimodules\categories\models\Categories';  
 
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['view']);
+        unset($actions['create']);
+        unset($actions['update']);
+        unset($actions['delete']);
+        return $actions;
+    }
+
     public function behaviors()
     {
         return ArrayHelper::merge(parent::behaviors(), [
