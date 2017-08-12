@@ -20,7 +20,7 @@ class CategoryController extends MainController
     public $credentials;
     private $app;
 
-    public $modelClass = 'yiimodules\categories\models\Categories';  
+    public $modelClass = '';  
 
     public function actions()
     {
