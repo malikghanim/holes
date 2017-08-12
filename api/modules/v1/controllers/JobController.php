@@ -61,8 +61,8 @@ class JobController extends MainController
                 'authMethods' => [
                     ['class' => HttpBearerAuth::className()],
                 ],
-                //'except' => ['index', 'view'],
-                //'only' => ['index', 'create', 'update', 'delete']
+                'except' => ['index', 'view'],
+                'only' => ['create', 'update', 'delete']
             ],
             'exceptionFilter' => [
                 'class' => ErrorToExceptionFilter::className()
