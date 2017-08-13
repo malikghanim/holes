@@ -39,7 +39,7 @@ class MainController extends ActiveController
             Yii::$app->response->setStatusCode($result['status']);
         else
             Yii::$app->response->setStatusCode($this->status);
-        
+
         return parent::afterAction($action,$result);
     }
 

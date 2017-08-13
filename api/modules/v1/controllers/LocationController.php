@@ -46,18 +46,15 @@ class LocationController extends MainController
     public function actionAllCountries()
     {
         $countries = Country::find()->all();
-        if (empty($countries))
+        if (empty($countries)) {
+            $this->status = 204;
             return [
-                'status' => 204,
-                'message' => 'No countries found!',
-                'data' => null
+                'message' => 'No countries found!'
             ];
+        }
 
-        return [
-            'status' => 200,
-            'message' => 'Countries retrieved successfully!',
-            'data' => $countries
-        ];
+        $this->status = 200;
+        return $countries;
         
 
     }
@@ -65,51 +62,43 @@ class LocationController extends MainController
     public function actionCountry($country_id)
     {
         $country = Country::findOne($country_id);
-        if (empty($country))
+        if (empty($country)) {
+            $this->status = 404;
             return [
-                'status' => 404,
                 'message' => 'Country not found!',
-                'data' => null
             ];
+        }
 
-        return [
-            'status' => 200,
-            'message' => 'Country retrieved successfully!',
-            'data' => $country
-        ];
+        $this->status = 200;
+        return $country;
     }
 
     public function actionAllCities()
     {
         $cities = City::find()->all();
-        if (empty($cities))
+        if (empty($cities)) {
+            $this->status = 204;
             return [
-                'status' => 404,
                 'message' => 'No cities found!',
-                'data' => null
             ];
+        }
 
-        return [
-            'status' => 200,
-            'message' => 'Cities retrieved successfully!',
-            'data' => $cities
-        ];
+        $this->status = 200;
+        return $cities;
     }
 
     public function actionCity($country_id)
     {
         $city = City::find()->where(['CountryCode' => $country_id])->all();
-        if (empty($city))
+        if (empty($city)) {
+            $this->status = 204;
             return [
-                'status' => 404,
-                'message' => 'City not found!',
-                'data' => null
+                'message' => 'City not found!'
             ];
+            
+        }
 
-        return [
-            'status' => 200,
-            'message' => 'City retrieved successfully!',
-            'data' => $city
-        ];
+        $this->status = 200;
+        return $city;
     }
 }

@@ -13,14 +13,36 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use filsh\yii2\oauth2server\filters\ErrorToExceptionFilter;
 
-class CategoryController extends MainController
+class CategoryController extends Controller
 {
 
     protected $user;
     public $credentials;
     private $app;
+    public $status = 200;
 
-    public $modelClass = '';  
+    public function beforeAction($event){
+        $beforeAction = parent::beforeAction($event);
+        
+        if($this->user = Yii::$app->user->identity)
+        {
+            $this->credentials = $this->user->email. ":". $this->user->password_hash;
+        }
+        return $beforeAction;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterAction($action, $result) {
+        Yii::$app->response->format = 'json';
+        if (is_array($result) && isset($result['status']))
+            Yii::$app->response->setStatusCode($result['status']);
+        else
+            Yii::$app->response->setStatusCode($this->status);
+
+        return parent::afterAction($action,$result);
+    }
 
     public function actions()
     {
@@ -54,36 +76,29 @@ class CategoryController extends MainController
     public function actionAll()
     {
         $cat = Yii::$app->getModule('categories')->getAll();
-        if (empty($cat))
+        if (empty($cat)) {
+            $this->status = 204;
             return [
-                'status' => 204,
-                'message' => 'No categories found!',
-                'data' => null
+                'message' => 'No categories found!'
             ];
+        }
 
-        return [
-            'status' => 200,
-            'message' => 'Categories retrieved successfully!',
-            'data' => $cat
-        ];
-        
+        $this->status = 200;
+        return $cat;
 
     }
 
     public function actionIndex($category_id)
     {
         $cat = Yii::$app->getModule('categories')->getOne($category_id);
-        if (empty($cat))
+        if (empty($cat)) {
+            $this->status = 404;
             return [
-                'status' => 404,
-                'message' => 'Category not found!',
-                'data' => null
+                'message' => 'Category not found!'
             ];
+        }
 
-        return [
-            'status' => 200,
-            'message' => 'Category retrieved successfully!',
-            'data' => $cat[0]
-        ];
+        $this->status = 200;
+        return $cat[0];
     }
 }
