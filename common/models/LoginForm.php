@@ -65,6 +65,8 @@ class LoginForm extends Model
      */
     public function login()
     {
+        $this->validate();
+        //var_dump($this->getErrors());die;
         if ($this->validate()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {

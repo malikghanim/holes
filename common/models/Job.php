@@ -133,6 +133,25 @@ class Job extends \yii\db\ActiveRecord
         }
     }
 
+    function fields(){
+        $data = [];
+        foreach ($this->getAttributes() as $key => $value) {
+            if($key == 'user_id'){
+                $data['available'] = function(){
+                    return true;
+                };
+
+                $data['userinfo'] = function(){
+                    return $this->user;
+                };
+            }
+
+            $data[] = $key;
+        }
+
+        return $data;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

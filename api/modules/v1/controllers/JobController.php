@@ -75,8 +75,18 @@ class JobController extends MainController
 
     public function actionUpdate($id)
     {
-        //var_dump(Yii::$app->getRequest()->getBodyParams());die;
-        $model = Job::findOne($id);
+        $model = Job::findOne([
+            'id' => $id,
+            'user_id' => Yii::$app->user->identity->id
+        ]);
+
+        if (empty($model)) {
+            $this->status = 404;
+            return [
+                'message' => 'Job not found!'
+            ];
+        }
+
         $params = Yii::$app->request->bodyParams;
         $model->load(['Job' => $params]);
         if (!$model->validate() || !$model->save()) {
