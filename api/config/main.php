@@ -11,7 +11,11 @@ return [
         'v1' => [
             'basePath' => '@app/modules/v1',
             'class' => 'api\modules\v1\Module'
-        ]
+        ],
+        'redactor' => 'yii\redactor\RedactorModule',
+        'categories' => [
+            'class' => 'yiimodules\categories\Module',
+        ],
     ],
     'components' => [
         'user' => [
@@ -75,7 +79,18 @@ return [
                 ],
                 'authorize' => 'site/authorize',
                 'POST oauth2/<action:\w+>' => 'oauth2/rest/<action>',
-                'GET test/index' => 'test/index',
+                'v1/categories' => 'v1/category/all',
+                'v1/categories/<category_id:\d+>' => 'v1/category/',
+                'v1/countries' => 'v1/location/all-countries',
+                'v1/countries/<country_id:\w+>' => 'v1/location/country',
+                'v1/cities' => 'v1/location/all-cities',
+                'v1/cities/<country_id:\w+>' => 'v1/location/city',
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/job',
+                    'tokens' => ['{id}' => '<id:[a-z0-9]*>'],
+                    'except' => ['delete']
+                ],
             ], 
         ]
     ],
