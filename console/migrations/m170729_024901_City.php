@@ -40,7 +40,7 @@ class m170729_024901_City extends Migration
 
     public function down()
     {
-        $this->dropForeignKey('fk-City-CountryCode', 'Country');
+        $this->dropForeignKey('fk-City-CountryCode', 'City');
         $this->dropTable('{{%City}}');
     }
 }
