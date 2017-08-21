@@ -183,4 +183,12 @@ class Job extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPackage()
+    {
+        return $this->hasOne(Package::className(), ['id' => 'package_id']);
+    }
 }
