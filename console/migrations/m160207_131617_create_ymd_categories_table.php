@@ -15,6 +15,11 @@ class m160207_131617_create_ymd_categories_table extends Migration
 {
     public function up()
     {
+
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql')
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+
         $this->createTable('ymd_categories', [
             'id'         => Schema::TYPE_PK,
             'parent_id'    => Schema::TYPE_INTEGER.' unsigned NULL',
@@ -29,7 +34,7 @@ class m160207_131617_create_ymd_categories_table extends Migration
             'is_active' => 'tinyint(1) NULL',
             'created_at' => Schema::TYPE_INTEGER . '(11) NULL',
             'updated_at' => Schema::TYPE_INTEGER . '(11) NULL',
-        ]);
+        ], $tableOptions);
     }
 
     public function down()

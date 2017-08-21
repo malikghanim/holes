@@ -19,6 +19,10 @@ class m170729_000619_country extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql')
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+
         $this->createTable('{{%Country}}', [
             'Code' => $this->char(3)->notNull(),
             'Name' => $this->string(100)->notNull(),
@@ -37,7 +41,7 @@ class m170729_000619_country extends Migration
             'Code2' => $this->char(2)->notNull()->defaultValue(''),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
-        ]);
+        ], $tableOptions);
         $this->addPrimaryKey('pk-id', 'Country', 'Code');
     }
 

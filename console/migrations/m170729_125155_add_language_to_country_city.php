@@ -19,13 +19,17 @@ class m170729_125155_add_language_to_country_city extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql')
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+
         $this->createTable('{{%Languag}}', [
             'id' => $this->primaryKey(),
             'Name' => $this->char(50)->notNull(),
             'iso_639-1' => $this->char(2)->notNull(),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
-        ]);
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer(),
+        ], $tableOptions);
     }
 
     public function down()

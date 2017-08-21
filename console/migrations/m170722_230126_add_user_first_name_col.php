@@ -32,6 +32,7 @@ class m170722_230126_add_user_first_name_col extends Migration
         $this->addColumn('user', 'email_confirm_token', $this->string());
         $this->addColumn('user', 'user_group', $this->integer());
         $this->addColumn('user', 'ip_address', $this->string());
+        $this->addColumn('user', 'CountryCode', $this->char(3)->defaultValue(null));
     }
 
     public function down()
@@ -49,5 +50,6 @@ class m170722_230126_add_user_first_name_col extends Migration
         $this->dropColumn('user', 'email_confirm_token');
         $this->dropColumn('user', 'user_group');
         $this->dropColumn('user', 'ip_address');
+        $this->dropColumn('user', 'CountryCode');
     }
 }

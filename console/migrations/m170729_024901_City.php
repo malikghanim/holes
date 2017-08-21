@@ -19,13 +19,19 @@ class m170729_024901_City extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql')
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+
         $this->createTable('{{%City}}', [
             'id' => $this->primaryKey(),
             'Name' => $this->char(35)->notNull()->defaultValue(''),
             'CountryCode' => $this->char(3)->notNull()->defaultValue(''),
             'District' => $this->char(20)->notNull()->defaultValue(''),
             'Population' => $this->integer(11)->notNull()->defaultValue(0),
-        ]);
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer()
+        ], $tableOptions);
 
         // add foreign key for table `Country`
         $this->addForeignKey(

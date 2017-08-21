@@ -28,6 +28,10 @@ class m170805_145434_jobs extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql')
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+
         $this->createTable('{{%Job}}', [
             'id' => $this->primaryKey(),
             'title' => $this->char(100)->notNull()->defaultValue(''),
@@ -39,7 +43,9 @@ class m170805_145434_jobs extends Migration
             'CountryCode' => $this->char(3)->notNull(),
             'city_id' => $this->integer(11)->notNull(),
             'user_id' => $this->integer(11)->notNull(),
-        ]);
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer()
+        ], $tableOptions);
 
         // add foreign key for table `Job`
         $this->addForeignKey(

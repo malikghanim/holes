@@ -28,6 +28,10 @@ class m170819_132107_create_packages extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql')
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+
         $this->createTable('{{%Package}}', [
             'id' => $this->primaryKey(),
             'title' => $this->char(100)->notNull()->defaultValue(''),
@@ -38,7 +42,7 @@ class m170819_132107_create_packages extends Migration
             'duration' => $this->integer(11)->notNull()->defaultValue(0),
             'created_at' => $this->integer(),
             'created_at' => $this->integer(),
-        ]);
+        ], $tableOptions);
 
     }
 
