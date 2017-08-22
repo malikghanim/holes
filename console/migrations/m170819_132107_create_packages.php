@@ -39,9 +39,9 @@ class m170819_132107_create_packages extends Migration
             'price' => $this->float()->notNull(),
             'duration' => $this->integer(11)->notNull()->defaultValue(0),
             'duaration_unit' => $this->char(20)->notNull()->defaultValue(''),
-            'duration' => $this->integer(11)->notNull()->defaultValue(0),
+            'weight' => $this->integer(11)->notNull()->defaultValue(0),
             'created_at' => $this->integer(),
-            'created_at' => $this->integer(),
+            'updated_at' => $this->integer(),
         ], $tableOptions);
 
     }

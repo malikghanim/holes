@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "Package".
@@ -15,7 +16,7 @@ use Yii;
  * @property string $duaration_unit
  * @property int $weight
  * @property int $created_at
- * @property string $updated_at
+ * @property int $updated_at
  *
  * @property Job[] $jobs
  */
@@ -29,18 +30,25 @@ class Package extends \yii\db\ActiveRecord
         return 'Package';
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['title','price','duration','duration_unit'], 'required'],
+            [['title' , 'description', 'price', 'duration', 'duaration_unit', 'weight'], 'required'],
             [['price'], 'number'],
-            [['duration', 'weight'], 'integer'],
+            [['duration', 'weight', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 100],
             [['description'], 'string', 'max' => 255],
-            [['duaration_unit'], 'string', 'max' => 20]
+            [['duaration_unit'], 'string', 'max' => 20],
         ];
     }
 
