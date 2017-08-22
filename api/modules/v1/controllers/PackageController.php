@@ -60,7 +60,7 @@ class PackageController extends MainController
                 'authMethods' => [
                     ['class' => HttpBearerAuth::className()],
                 ],
-                'only' => ['index', 'view'],
+                'except' => ['index', 'view'],
                 //'only' => ['create', 'update', 'delete']
             ],
             'exceptionFilter' => [
