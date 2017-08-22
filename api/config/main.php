@@ -91,6 +91,12 @@ return [
                     'tokens' => ['{id}' => '<id:[a-z0-9]*>'],
                     'except' => ['delete']
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/package',
+                    'tokens' => ['{id}' => '<id:[a-z0-9]*>'],
+                    'except' => ['create','update','delete']
+                ],
             ], 
         ]
     ],
