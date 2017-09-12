@@ -152,6 +152,10 @@ class Job extends \yii\db\ActiveRecord
                 $data['country_name'] = function(){
                     return $this->city->country->Name;
                 };
+
+                $data['category_name'] = function(){
+                    return $this->category->name;
+                };
             }
 
             $data[] = $key;
