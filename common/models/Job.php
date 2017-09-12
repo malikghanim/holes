@@ -66,7 +66,8 @@ class Job extends \yii\db\ActiveRecord
                     'city_id',
                     'working_from' ,
                     'working_to',
-                    'mobile'
+                    'mobile',
+                    'address'
                 ], 'safe'
             ],
             [
@@ -81,8 +82,6 @@ class Job extends \yii\db\ActiveRecord
             ],
             [
                 [
-                    'working_from',
-                    'working_to',
                     'category_id',
                     'city_id',
                     'user_id'
@@ -118,6 +117,7 @@ class Job extends \yii\db\ActiveRecord
             'category_id' => Yii::t('app', 'Category ID'),
             'CountryCode' => Yii::t('app', 'Country Code'),
             'city_id' => Yii::t('app', 'City ID'),
+            'address' => Yii::t('app', 'Address'),
             'user_id' => Yii::t('app', 'User ID'),
         ];
     }
@@ -143,6 +143,14 @@ class Job extends \yii\db\ActiveRecord
 
                 $data['userinfo'] = function(){
                     return $this->user;
+                };
+
+                $data['city_name'] = function(){
+                    return $this->city->Name;
+                };
+
+                $data['country_name'] = function(){
+                    return $this->city->country->Name;
                 };
             }
 
