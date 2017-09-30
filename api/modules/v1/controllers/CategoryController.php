@@ -3,37 +3,45 @@ namespace api\modules\v1\controllers;
 
 use Yii;
 use yii\rest\Controller;
-use api\controllers\MainController;
-//use common\components\exceptions\ApiCommonException;
-//use common\models\operations\core\OperationResponse;
+use yii\filters\AccessControl;
+use yii\rest\ActiveController;
+use yii\filters\VerbFilter;
 use yii\web\Response;
-use yii\helpers\ArrayHelper;
-use filsh\yii2\oauth2server\filters\auth\CompositeAuth;
+use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
-use filsh\yii2\oauth2server\filters\ErrorToExceptionFilter;
 
 class CategoryController extends Controller
 {
 
-    protected $user;
-    public $credentials;
-    private $app;
+    protected $user = null;
     public $status = 200;
 
-    public function beforeAction($event){
-        $beforeAction = parent::beforeAction($event);
-        
-        if($this->user = Yii::$app->user->identity)
-        {
-            $this->credentials = $this->user->email. ":". $this->user->password_hash;
-        }
-        return $beforeAction;
+    public function init() {
+        parent::init();
+        \Yii::$app->user->enableSession = false;
     }
+    
+    public function behaviors() {
+        $behaviors = parent::behaviors();
+        $behaviors['contentNegotiator']['formats']['application/json'] = Response::FORMAT_JSON;
+        $behaviors['authenticator'] = [
+            'class' => HttpBasicAuth::className(),
+            'except' => ['index', 'all'],
+            'auth' => [$this, 'auth']
+        ];
+        return $behaviors;
+    }
+    
 
-    /**
-     * @inheritdoc
-     */
+    public function auth($username, $password)
+    {
+        $user = new \common\models\User();
+        return $user->checkUserCredentials($username, $password);
+    }
+    
+
     public function afterAction($action, $result) {
         Yii::$app->response->format = 'json';
         if (is_array($result) && isset($result['status']))
@@ -44,6 +52,8 @@ class CategoryController extends Controller
         return parent::afterAction($action,$result);
     }
 
+    //////////////////////////////
+
     public function actions()
     {
         $actions = parent::actions();
@@ -52,25 +62,6 @@ class CategoryController extends Controller
         unset($actions['update']);
         unset($actions['delete']);
         return $actions;
-    }
-
-    public function behaviors()
-    {
-        return ArrayHelper::merge(parent::behaviors(), [
-            'authenticator' => [
-                'class' => CompositeAuth::className(),
-                'authMethods' => [
-                    ['class' => HttpBearerAuth::className()],
-                ],
-                'except' => ['index', 'all']
-            ],
-            'exceptionFilter' => [
-                'class' => ErrorToExceptionFilter::className()
-            ],
-            'rateLimiter' => [
-                'enableRateLimitHeaders' => true
-            ]
-        ]);
     }
 
     public function actionAll()

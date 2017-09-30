@@ -306,7 +306,10 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
         if (empty($user)) {
             return false;
         }
-        return $user->validatePassword($password);
+
+        if ($user->validatePassword($password)) {
+            return $user;
+        }
     }
 
     /**
@@ -325,5 +328,15 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
     public function getCountry()
     {
         return $this->hasOne(Country::className(), ['Code' => 'CountryCode']);
+    }
+
+    public function toJson() {
+        $out = [];
+        $out['_id'] = $this->getId();
+        $out['first_name'] = $this->first_name;
+        $out['last_name'] = $this->last_name;
+        $out['email'] = $this->email;
+        $out['role'] = $this->role;
+        return $out;
     }
 }

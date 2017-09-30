@@ -2,45 +2,33 @@
 namespace api\modules\v1\controllers;
 
 use Yii;
-use yii\rest\Controller;
+use yii\filters\AccessControl;
+use yii\rest\ActiveController;
 use api\controllers\MainController;
-//use common\components\exceptions\ApiCommonException;
-//use common\models\operations\core\OperationResponse;
+use yii\filters\VerbFilter;
 use yii\web\Response;
-use yii\helpers\ArrayHelper;
-use filsh\yii2\oauth2server\filters\auth\CompositeAuth;
+use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
-use filsh\yii2\oauth2server\filters\ErrorToExceptionFilter;
+use yii\data\ActiveDataProvider;
+
 use common\models\Country;
 use common\models\City;
 
+
 class LocationController extends MainController
 {
-
-    protected $user;
-    public $credentials;
-    private $app;
-
     public $modelClass = 'common\models\City';
 
-    public function behaviors()
-    {
-        return ArrayHelper::merge(parent::behaviors(), [
-            'authenticator' => [
-                'class' => CompositeAuth::className(),
-                'authMethods' => [
-                    ['class' => HttpBearerAuth::className()],
-                ],
-                'except' => ['all-countries', 'country', 'all-cities', 'city']
-            ],
-            'exceptionFilter' => [
-                'class' => ErrorToExceptionFilter::className()
-            ],
-            'rateLimiter' => [
-                'enableRateLimitHeaders' => true
-            ]
-        ]);
+    public function behaviors() {
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => HttpBasicAuth::className(),
+            'except' => ['all-countries', 'country', 'all-cities', 'city'],
+            'auth' => [$this, 'auth']
+        ];
+        return $behaviors;
     }
 
     public function actionAllCountries()
