@@ -304,7 +304,7 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
     {
         $user = static::findByUsername($username);
         if (empty($user)) {
-            return false;
+            return null;
         }
 
         if ($user->validatePassword($password)) {
