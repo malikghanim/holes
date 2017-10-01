@@ -102,10 +102,14 @@ class CategoryController extends Controller
 
     private function handleCat($cat){
         if (empty($cat['sub_categories']))
-            return $cat;
+            return ['id' => $cat['id'], 'name' => $cat['name']];
 
         foreach ($cat['sub_categories'] as $ct) {
-            return $this->handleCat($ct);
+            // return $this->handleCat($ct);
+            $res = $this->handleCat($ct);
+            if ((!empty($cat['sub_categories'])))
+                $res['name'] = $cat['name'].'/'.$res['name'];
+            return ['id' => $res['id'], 'name' => $res['name']];
         }
     }
 
