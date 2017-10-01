@@ -50,10 +50,13 @@ class MainController extends ActiveController
 
     public function afterAction($action, $result) {
         Yii::$app->response->format = 'json';
+
         if (is_array($result) && isset($result['status']))
             Yii::$app->response->setStatusCode($result['status']);
-        else
-            Yii::$app->response->setStatusCode($this->status);
+        else{
+            if (!Yii::$app->response->getStatusCode())
+                Yii::$app->response->setStatusCode($this->status);
+        }
 
         return parent::afterAction($action,$result);
     }
