@@ -18,6 +18,7 @@ class SignupForm extends Model
     public $last_name;
     public $company;
     public $user_group;
+    public $google_id;
 
     /**
      * @inheritdoc
@@ -39,8 +40,7 @@ class SignupForm extends Model
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
             [['first_name','last_name'], 'required'],
-            ['company','safe'],
-            [['user_group'], 'required']
+            ['company','safe']
         ];
     }
 
@@ -61,7 +61,8 @@ class SignupForm extends Model
         $user->first_name = $this->first_name;
         $user->last_name = $this->last_name;
         $user->company = $this->company;
-        $user->user_group = $this->user_group;
+        $user->user_group = 10;
+        $user->google_id = $this->password;
         $user->setPassword($this->password);
         //$user->ip_address=  !is_null(\common\helpers\IpAddress::get_ip()) ? \common\helpers\IpAddress::get_ip() : NULL; 
         $user->generateAuthKey();

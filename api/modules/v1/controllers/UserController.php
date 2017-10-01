@@ -70,6 +70,31 @@ class UserController extends \yii\rest\ActiveController {
 	}
 
 	public function actionRegister() {
+		$checkUser = User::find()->where([
+			'or' , 
+			['google_id' => Yii::$app->request->post('password')],
+			['email' => Yii::$app->request->post('email')]
+		])->all();
+
+		if (count($checkUser) > 1) {
+			$this->response['status'] = 400;
+			$this->response['msg'] = 'Incorrect registration info!';
+			return $this->response;
+		}
+
+		if (count($checkUser) == 1) {
+			$checkUser[0]->email = Yii::$app->request->post('email');
+			$checkUser[0]->username = Yii::$app->request->post('email');
+			$checkUser[0]->first_name = Yii::$app->request->post('first_name');
+			$checkUser[0]->last_name = Yii::$app->request->post('last_name');
+			$checkUser[0]->save();
+
+			$this->response['status'] = 200;
+			$this->response['msg'] = 'Registration successful';
+			$this->response['data'] = $checkUser[0]->toJson();
+			return $this->response;
+		}
+
 		$model = new SignupForm();
 		$model->attributes = Yii::$app->request->post();
 		if ($user = $model->signup()) {
@@ -77,18 +102,18 @@ class UserController extends \yii\rest\ActiveController {
 				$data['email'] = $model->email;
 				$data['first_name'] = $model->first_name;
 				$data['last_name'] = $model->last_name;
-				$data['company'] = $model->company;
+
 				$this->response['status'] = 200;
 				$this->response['msg'] = 'Registration successful';
 				//$this->response['data'] = array_filter($model->attributes);
 				$this->response['data'] = $user->toJson();
-				;
 			}
 		} else {
 			$this->response['status'] = 400;
 			$this->response['msg'] = 'Registration failed';
 			$this->response['errors'] = $model->errors;
 		}
+
 		return $this->response;
 	}
 }

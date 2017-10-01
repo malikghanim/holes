@@ -336,7 +336,7 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
         $out['first_name'] = $this->first_name;
         $out['last_name'] = $this->last_name;
         $out['email'] = $this->email;
-        $out['role'] = $this->role;
+        $out['google_id'] = $this->google_id;
         return $out;
     }
 }
