@@ -80,6 +80,7 @@ return [
                 'authorize' => 'site/authorize',
                 'POST oauth2/<action:\w+>' => 'oauth2/rest/<action>',
                 'v1/categories' => 'v1/category/all',
+                'v1/categories/filtered-categories' => 'v1/category/filtered-categories',
                 'v1/categories/<category_id:\d+>' => 'v1/category/',
                 'v1/countries' => 'v1/location/all-countries',
                 'v1/countries/<country_id:\w+>' => 'v1/location/country',

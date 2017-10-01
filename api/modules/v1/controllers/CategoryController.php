@@ -28,7 +28,7 @@ class CategoryController extends Controller
         $behaviors['contentNegotiator']['formats']['application/json'] = Response::FORMAT_JSON;
         $behaviors['authenticator'] = [
             'class' => HttpBasicAuth::className(),
-            'except' => ['index', 'all'],
+            'except' => ['index', 'all', 'filtered-categories'],
             'auth' => [$this, 'auth']
         ];
         return $behaviors;
@@ -67,6 +67,7 @@ class CategoryController extends Controller
     public function actionAll()
     {
         $cat = Yii::$app->getModule('categories')->getAll();
+        // var_dump($cat);die;
         if (empty($cat)) {
             $this->status = 204;
             return [
@@ -77,6 +78,35 @@ class CategoryController extends Controller
         $this->status = 200;
         return $cat;
 
+    }
+
+    public function actionFilteredCategories()
+    {
+        $cat = Yii::$app->getModule('categories')->getAll();
+        // var_dump($cat);die;
+        if (empty($cat)) {
+            $this->status = 204;
+            return [
+                'message' => 'No categories found!'
+            ];
+        }
+
+        $result = [];
+        foreach ($cat as $category) {
+            $result[] = $this->handleCat($category);
+        }
+
+        $this->status = 200;
+        return $result;
+    }
+
+    private function handleCat($cat){
+        if (empty($cat['sub_categories']))
+            return $cat;
+
+        foreach ($cat['sub_categories'] as $ct) {
+            return $this->handleCat($ct);
+        }
     }
 
     public function actionIndex($category_id)
