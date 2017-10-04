@@ -98,6 +98,12 @@ return [
                     'tokens' => ['{id}' => '<id:[a-z0-9]*>'],
                     'except' => ['create','update','delete']
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/favorite',
+                    'tokens' => ['{id}' => '<id:[a-z0-9]*>'],
+                    'except' => ['update','delete']
+                ],
             ], 
         ]
     ],
