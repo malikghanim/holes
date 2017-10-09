@@ -107,6 +107,17 @@ class Favorite extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getJobTitle()
+    {
+        if (!empty($this->job))
+            return $this->job->title;
+        else
+            return null;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getPackage()
     {
         return $this->hasOne(Package::className(), ['id' => 'package_id']);

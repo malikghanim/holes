@@ -14,6 +14,7 @@ use yii\filters\auth\QueryParamAuth;
 use yii\data\ActiveDataProvider;
 
 use common\models\Job;
+use common\models\Favorite;
 use common\models\FavoriteSearch;
 use yii\filters\Cors;
 
@@ -26,8 +27,12 @@ class FavoriteController extends MainController
     {
         $actions = parent::actions();
         //var_dump($actions);die;
+        unset($actions['index']);
+        unset($actions['view']);
+        unset($actions['create']);
         unset($actions['update']);
         unset($actions['delete']);
+        unset($actions['options']);
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
         return $actions;
     }
@@ -47,40 +52,37 @@ class FavoriteController extends MainController
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBasicAuth::className(),
-            'except' => ['create','update','delete','index','view'],
+            'except' => ['index','view'],
             'auth' => [$this, 'auth']
         ];
         return $behaviors;
     }
 
-    /*public function actionUpdate($id)
+    public function actionCreate()
     {
-        $model = Job::findOne([
-            'id' => $id,
-            'user_id' => Yii::$app->user->identity->id
-        ]);
+        $model = new Favorite();
+        $model->load(['Favorite' => Yii::$app->request->post()]);
+        $sql = 'SELECT * FROM Favorite 
+                WHERE job_id=:job_id AND active=1';
 
-        if (empty($model)) {
-            $this->status = 404;
+        $checkFav = Favorite::findBySql($sql, [
+            ':job_id' => $model->job_id,
+            // ':package_id' => $model->package_id
+        ])->all();
+
+        if (!empty($checkFav))
             return [
-                'message' => 'Job not found!'
+                'status' => 400,
+                'message' => 'Your Favorite add already submited!'
             ];
-        }
 
-        $params = Yii::$app->request->bodyParams;
-        $model->load(['Job' => $params]);
-        if (!$model->validate() || !$model->save()) {
-            $errors = [];
-            foreach ($model->getErrors() as $key => $value) {
-                $errors[] = ['field' => $key, 'message' => $value[0]];
-            }
+        if (!$model->validate() || !$model->save())
+            return ['status' => 400, 'errors' => $model->getErrors()];
 
-            $this->status = 400;
-            return $errors;
-        }
-
-        $model->save();
-        return $model;
-    }*/
+        return [
+            'status' => 200,
+            'message' => 'your request submitted successfully!'
+        ];
+    }
 
 }

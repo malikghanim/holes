@@ -12,6 +12,7 @@ use common\models\Favorite;
  */
 class FavoriteSearch extends Favorite
 {
+    public $jobTitle;
     /**
      * @inheritdoc
      */
@@ -19,6 +20,7 @@ class FavoriteSearch extends Favorite
     {
         return [
             [['id', 'package_id', 'job_id', 'user_id', 'start_date', 'end_date', 'weight', 'active', 'created_at', 'updated_at'], 'integer'],
+            ['jobTitle', 'safe']
         ];
     }
 
@@ -40,12 +42,13 @@ class FavoriteSearch extends Favorite
      */
     public function search($params)
     {
-        $query = Favorite::find();
+        $query = Favorite::find()->with('job')->with('package')->with('user');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['created_at'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -58,17 +61,22 @@ class FavoriteSearch extends Favorite
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'package_id' => $this->package_id,
-            'job_id' => $this->job_id,
-            'user_id' => $this->user_id,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'weight' => $this->weight,
-            'active' => $this->active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'Favorite.id' => $this->id,
+            'Favorite.package_id' => $this->package_id,
+            'Favorite.job_id' => $this->job_id,
+            'Favorite.user_id' => $this->user_id,
+            'Favorite.start_date' => $this->start_date,
+            'Favorite.end_date' => $this->end_date,
+            'Favorite.weight' => $this->weight,
+            'Favorite.active' => $this->active,
+            'Favorite.created_at' => $this->created_at,
+            'Favorite.updated_at' => $this->updated_at,
         ]);
+
+        // filter by country name
+        $query->joinWith(['job' => function ($q) {
+            $q->where('Job.title LIKE "%' . $this->jobTitle . '%"');
+        }]);
 
         return $dataProvider;
     }

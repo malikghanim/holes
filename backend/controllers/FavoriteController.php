@@ -38,9 +38,12 @@ class FavoriteController extends Controller
         $searchModel = new FavoriteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $packages = \common\models\Package::find()->all();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'packages' => $packages
         ]);
     }
 
