@@ -80,7 +80,7 @@ class FavoriteController extends MainController
             return ['status' => 400, 'errors' => $model->getErrors()];
 
         // var_dump(Yii::$app->user->identity->email);die;
-        /*Yii::$app->mailer->setTransport([
+        Yii::$app->mailer->setTransport([
             'class' => 'Swift_SmtpTransport',
             'host' => 'smtp.gmail.com',
             'username' => 'malikghanim@gmail.com',
@@ -95,7 +95,7 @@ class FavoriteController extends MainController
             ->setSubject('Message subject')
             ->setTextBody('Plain text content')
             ->setHtmlBody('<b>HTML content</b>')
-            ->send();*/
+            ->send();
 
         return [
             'status' => 200,
