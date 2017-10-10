@@ -82,7 +82,7 @@ class FavoriteController extends MainController
         // var_dump(Yii::$app->user->identity->email);die;
         Yii::$app->mailer->setTransport([
             'class' => 'Swift_SmtpTransport',
-            'host' => 'gmail-smtp-msa.l.google.com',
+            'host' => 'smtp.gmail.com',
             'username' => 'malikghanim@gmail.com',
             'password' => 'Vaio1962',
             'port' => '25'
