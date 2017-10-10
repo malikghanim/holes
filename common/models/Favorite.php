@@ -3,7 +3,6 @@
 namespace common\models;
 
 use Yii;
-use UTCDateTime;
 use yii\behaviors\TimestampBehavior;
 
 /**
