@@ -90,8 +90,10 @@ class FavoriteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $packages = \common\models\Package::find()->all();
             return $this->render('update', [
                 'model' => $model,
+                'packages' => $packages
             ]);
         }
     }

@@ -29,15 +29,27 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'package_id',
-            'job_id',
-            'user_id',
-            'start_date',
-            'end_date',
+            [                      // the owner name of the model
+                'label' => 'Package',
+                'value' => $model->package->title,
+            ],
+            // 'package_id',
+            [                      // the owner name of the model
+                'label' => 'Job Title',
+                'value' => $model->job->title,
+            ],
+            // 'job_id',
+            [                      // the owner name of the model
+                'label' => 'User',
+                'value' => $model->user->email,
+            ],
+            // 'user_id',
+            'start_date:datetime',
+            'end_date:datetime',
             'weight',
             'active',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

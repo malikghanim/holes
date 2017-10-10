@@ -15,6 +15,8 @@ $pkgs = [];
 foreach ($packages as $pkg) {
     $pkgs[$pkg->id] = $pkg->title;
 }
+
+$statuses = ["0"=>"Pending","1"=>"Active","3"=>"Expire"];
 ?>
 <div class="favorite-index">
 
@@ -70,9 +72,13 @@ foreach ($packages as $pkg) {
                 'class' => DataColumn::className(), // this line is optional
                 'headerOptions' => ['style' => 'width:2%'],
                 'attribute' => 'active',
-                'filter'=>["0"=>"Pending","1"=>"Active","3"=>"Expire"],
+                'filter'=>$statuses,
                 'format' => 'text',
-                'label' => 'Active',
+                'label' => 'Status',
+                'value' => function($data){
+                    $statuses = ["0"=>"Pending","1"=>"Active","2"=>"Rejected","3"=>"Expire"];
+                    return $statuses[$data->active];
+                }
             ],
             'start_date:datetime',
             'end_date:datetime',

@@ -76,6 +76,8 @@ class FavoriteController extends MainController
                 'message' => 'Your Favorite add already submited!'
             ];
 
+        $model->weight = $model->package->weight;
+
         if (!$model->validate() || !$model->save())
             return ['status' => 400, 'errors' => $model->getErrors()];
 

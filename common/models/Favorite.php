@@ -89,6 +89,17 @@ class Favorite extends \yii\db\ActiveRecord
                 $this->user_id = $this->job->user->id;
             }
 
+            if (empty($this->start_date) && $this->active == 1)
+                $this->start_date = date('U');
+
+            if (empty($this->end_date) && $this->active == 1) {
+                $date = new \DateTime();
+                $timeFlag = ($this->package->duaration_unit == 'H')? 'T':'';
+                $interval = new \DateInterval("P{$timeFlag}{$this->package->duration}{$this->package->duaration_unit}");
+                $date->add($interval);
+                $this->end_date = $date->format('U');
+            }
+
             return true;
         } else {
             return false;
