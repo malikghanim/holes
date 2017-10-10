@@ -79,6 +79,23 @@ class FavoriteController extends MainController
         if (!$model->validate() || !$model->save())
             return ['status' => 400, 'errors' => $model->getErrors()];
 
+        // var_dump(Yii::$app->user->identity->email);die;
+        Yii::$app->mailer->setTransport([
+            'class' => 'Swift_SmtpTransport',
+            'host' => 'gmail-smtp-msa.l.google.com',
+            'username' => 'malikghanim@gmail.com',
+            'password' => 'Vaio1962',
+            'port' => '25'
+        ]);
+
+        Yii::$app->mailer->compose()
+            ->setFrom(Yii::$app->params['adminEmail'])
+            ->setTo(Yii::$app->params['adminEmail'])
+            ->setSubject('Message subject')
+            ->setTextBody('Plain text content')
+            ->setHtmlBody('<b>HTML content</b>')
+            ->send();
+
         return [
             'status' => 200,
             'message' => 'your request submitted successfully!'
