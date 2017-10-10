@@ -85,7 +85,8 @@ class FavoriteController extends MainController
             'host' => 'smtp.gmail.com',
             'username' => 'malikghanim@gmail.com',
             'password' => 'Vaio1962',
-            'port' => '25'
+            'port' => '25',
+            'encryption' => 'tls'
         ]);
 
         Yii::$app->mailer->compose()
