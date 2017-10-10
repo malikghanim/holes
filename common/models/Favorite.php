@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-use MongoDB\BSON\UTCDateTime;
+use UTCDateTime;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -79,7 +79,7 @@ class Favorite extends \yii\db\ActiveRecord
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
-                'value' => new UTCDateTime(),
+                'value' => function() { return date('U');},
             ]
         ];
     }
