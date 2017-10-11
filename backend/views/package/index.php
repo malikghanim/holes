@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\grid\DataColumn;
+
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\PackageSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,18 +27,34 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+            [
+                'class' => DataColumn::className(), // this line is optional
+                'headerOptions' => ['style' => 'width:1%'],
+                'attribute' => 'id',
+                'format' => 'text',
+                'label' => 'ID',
+            ],
             'title',
             'description',
             'price',
             'duration',
             // 'duaration_unit',
+            [
+                'class' => DataColumn::className(), // this line is optional
+                'headerOptions' => ['style' => 'width:15%'],
+                'attribute' => 'duaration_unit',
+                'filter'=> common\models\Package::DURATION_UNITS,
+                'format' => 'text',
+                'label' => 'Duaration Unit',
+                'value' => function($data){
+                    return common\models\Package::DURATION_UNITS[$data->duaration_unit];
+                }
+            ],
             // 'weight',
             // 'created_at',
             // 'updated_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template'=>'{view} {update}'],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

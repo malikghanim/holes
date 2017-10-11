@@ -158,6 +158,10 @@ class Job extends \yii\db\ActiveRecord
                 };
             }
 
+            $data['favWeight'] = function(){
+                return $this->favorite;
+            };
+
             $data[] = $key;
         }
 
@@ -202,5 +206,13 @@ class Job extends \yii\db\ActiveRecord
     public function getPackage()
     {
         return $this->hasOne(Package::className(), ['id' => 'package_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFavorite()
+    {
+        return $this->hasMany(Favorite::className(), ['job_id' => 'id'])->where(['active' => 1])->orderBy(['created_at' => SORT_DESC]);
     }
 }

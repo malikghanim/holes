@@ -20,7 +20,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'duration')->textInput() ?>
 
-    <?= $form->field($model, 'duaration_unit')->textInput(['maxlength' => true]) ?>
+
+    <?=  $form->field($model, 'duaration_unit')->dropdownList(
+        common\models\Package::DURATION_UNITS
+    )->label('Package') ?>
 
     <?= $form->field($model, 'weight')->textInput() ?>
 

@@ -16,13 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+        <?php /*Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
-        ]) ?>
+        ])*/ ?>
     </p>
 
     <?= DetailView::widget([
@@ -33,7 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'description',
             'price',
             'duration',
-            'duaration_unit',
+            [                      // the owner name of the model
+                'label' => $model->getAttributeLabel('duaration_unit'),
+                'value' => common\models\Package::DURATION_UNITS[$model->duaration_unit],
+            ],
+            // 'duaration_unit',
             'weight',
             'created_at',
             'updated_at',

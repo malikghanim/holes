@@ -27,7 +27,7 @@ class JobController extends MainController
     public function actions()
     {
         $actions = parent::actions();
-        //var_dump($actions);die;
+        // var_dump($actions);die;
         unset($actions['update']);
         unset($actions['delete']);
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];

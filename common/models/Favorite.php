@@ -25,6 +25,13 @@ use yii\behaviors\TimestampBehavior;
  */
 class Favorite extends \yii\db\ActiveRecord
 {
+    const STATUSES = [
+        0 => 'Pending', 
+        1 => 'Active',
+        2 => 'Reject',
+        3 => 'Expire'
+    ];
+
     /**
      * @inheritdoc
      */
@@ -62,7 +69,7 @@ class Favorite extends \yii\db\ActiveRecord
             'start_date' => Yii::t('app', 'Start Date'),
             'end_date' => Yii::t('app', 'End Date'),
             'weight' => Yii::t('app', 'Weight'),
-            'active' => Yii::t('app', 'Active'),
+            'active' => Yii::t('app', 'Status'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];

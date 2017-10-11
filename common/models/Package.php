@@ -22,6 +22,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class Package extends \yii\db\ActiveRecord
 {
+    const DURATION_UNITS = ['H' => 'Hour', 'D' => 'Day', 'M' => 'Month', 'Y' => 'Year'];
     /**
      * @inheritdoc
      */

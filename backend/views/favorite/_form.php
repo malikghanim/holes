@@ -39,12 +39,7 @@ foreach ($packages as $pkg) {
     )->label('Package') ?>
 
     <?=  $form->field($model, 'active')->dropdownList(
-        [
-            0 => 'Pending', 
-            1 => 'Active',
-            2 => 'Reject',
-            3 => 'Expire'
-        ]
+        common\models\Favorite::STATUSES
     )->label('Status') ?>
 
     <div class="form-group">

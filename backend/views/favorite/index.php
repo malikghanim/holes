@@ -15,8 +15,6 @@ $pkgs = [];
 foreach ($packages as $pkg) {
     $pkgs[$pkg->id] = $pkg->title;
 }
-
-$statuses = ["0"=>"Pending","1"=>"Active","3"=>"Expire"];
 ?>
 <div class="favorite-index">
 
@@ -72,12 +70,11 @@ $statuses = ["0"=>"Pending","1"=>"Active","3"=>"Expire"];
                 'class' => DataColumn::className(), // this line is optional
                 'headerOptions' => ['style' => 'width:2%'],
                 'attribute' => 'active',
-                'filter'=>$statuses,
+                'filter'=> common\models\Favorite::STATUSES,
                 'format' => 'text',
                 'label' => 'Status',
                 'value' => function($data){
-                    $statuses = ["0"=>"Pending","1"=>"Active","2"=>"Rejected","3"=>"Expire"];
-                    return $statuses[$data->active];
+                    return common\models\Favorite::STATUSES[$data->active];
                 }
             ],
             'start_date:datetime',
