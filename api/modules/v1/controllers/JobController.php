@@ -49,9 +49,10 @@ class JobController extends MainController
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBasicAuth::className(),
-            'except' => ['index', 'view'],
+            'except' => ['index'],
             'auth' => [$this, 'auth']
         ];
+
         return $behaviors;
     }
 
