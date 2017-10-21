@@ -53,7 +53,11 @@ class JobSearch extends Job
             'query' => $query,
         ]);
 
-        $this->load($params);
+        if(Yii::$app->controllerNamespace == 'backend\controllers')
+            $this->load($params);
+        else
+            $this->load(['JobSearch' => $params]);
+
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
