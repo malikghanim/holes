@@ -14,6 +14,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
+    <?=  $form->field($model, 'status')->dropdownList(
+        common\models\Job::JOB_STATUS
+    )->label('Status') ?>
+
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>

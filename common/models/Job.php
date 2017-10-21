@@ -32,6 +32,11 @@ use yii\behaviors\TimestampBehavior;
  */
 class Job extends \yii\db\ActiveRecord
 {
+    const JOB_STATUS = [
+        0 => 'Pending',
+        1 => 'Active',
+        2 => 'Reject'
+    ];
     /**
      * @inheritdoc
      */
@@ -72,7 +77,8 @@ class Job extends \yii\db\ActiveRecord
                     'working_from' ,
                     'working_to',
                     'mobile',
-                    'address'
+                    'address',
+                    'status'
                 ], 'safe'
             ],
             [
@@ -124,6 +130,7 @@ class Job extends \yii\db\ActiveRecord
             'city_id' => Yii::t('app', 'City ID'),
             'address' => Yii::t('app', 'Address'),
             'user_id' => Yii::t('app', 'User ID'),
+            'status' => Yii::t('app', 'Status'),
         ];
     }
 
@@ -167,6 +174,33 @@ class Job extends \yii\db\ActiveRecord
         }
 
         return $data;
+    }
+
+    public static function find() {
+        if(Yii::$app->controllerNamespace == 'backend\controllers')
+            return parent::find();
+
+        return parent::find()->where(['status' => 1]);
+    }
+
+    public function afterFind()
+    {
+        if ($this->favorite == 1 && (int)$this->fav_end_date < (int)date('U')) {
+            $fav = Favorite::findOne([
+                'weight' => $this->weight,
+                'start_date' => $this->fav_start_date,
+                'end_date' => $this->fav_end_date
+            ]);
+            if (!empty($fav)) {
+                $fav->active = 3;
+                $fav->save();
+            }
+            $this->favorite = 0;
+            $this->weight = 0;
+            $this->save();
+        }
+
+        parent::afterFind();
     }
 
     /**

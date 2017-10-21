@@ -30,6 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
+            // 'status',
+            [                      // the owner name of the model
+                'label' => $model->getAttributeLabel('status'),
+                'value' => common\models\Job::JOB_STATUS[$model->status],
+            ],
             'description',
             'mobile',
             'working_from',

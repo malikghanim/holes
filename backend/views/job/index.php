@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\grid\DataColumn;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\JobSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -24,14 +25,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'title',
+            [
+                'class' => DataColumn::className(), // this line is optional
+                'headerOptions' => ['style' => 'width:15%'],
+                'attribute' => 'status',
+                'filter'=> common\models\Job::JOB_STATUS,
+                'format' => 'text',
+                'label' => 'Status',
+                'value' => function($data){
+                    return common\models\Job::JOB_STATUS[$data->status];
+                }
+            ],
             'description',
             'mobile',
             'working_from',
-            // 'working_to',
+            'working_to',
             // 'category_id',
             // 'CountryCode',
             // 'city_id',
