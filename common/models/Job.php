@@ -19,6 +19,11 @@ use yii\behaviors\TimestampBehavior;
  * @property string $CountryCode
  * @property int $city_id
  * @property int $user_id
+ * @property int $status
+ * @property int $favorite
+ * @property int $fav_start_date
+ * @property int $fav_end_date
+ * @property int $weight
  *
  * @property Country $countryCode
  * @property YmdCategories $category
@@ -157,10 +162,6 @@ class Job extends \yii\db\ActiveRecord
                     return $this->category->name;
                 };
             }
-
-            $data['favWeight'] = function(){
-                return $this->favorite;
-            };
 
             $data[] = $key;
         }

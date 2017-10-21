@@ -42,24 +42,12 @@ class JobSearch extends Job
      */
     public function search($params)
     {
-        $query = Job::find()->with('favorite');
+        $query = Job::find()->with('favorite')->orderBy(['weight' => SORT_DESC]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-        ]);
-
-        // $dataProvider->sort->attributes['favorite'] = [
-        //     'desc' => ['favorite.weight' => SORT_DESC]
-        // ];
-
-        $dataProvider->setSort([
-            'attributes' => [
-                'favorite' => [            
-                    'desc' =>   [ 'Favorite.weight' => SORT_DESC ]
-                ],                 
-            ]
         ]);
 
         $this->load(['JobSearch' => $params]);

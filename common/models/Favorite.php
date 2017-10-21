@@ -105,6 +105,12 @@ class Favorite extends \yii\db\ActiveRecord
                 $interval = new \DateInterval("P{$timeFlag}{$this->package->duration}{$this->package->duaration_unit}");
                 $date->add($interval);
                 $this->end_date = $date->format('U');
+                // Update Job
+                $this->job->favorite = 1;
+                $this->job->weight = $this->package->weight;
+                $this->job->fav_start_date = $this->start_date;
+                $this->job->fav_end_date = $this->end_date;
+                $this->job->save();
             }
 
             return true;
