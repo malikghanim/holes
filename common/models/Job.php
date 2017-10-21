@@ -189,6 +189,10 @@ class Job extends \yii\db\ActiveRecord
         if(Yii::$app->controllerNamespace == 'backend\controllers')
             return parent::find();
 
+        var_dump(Yii::$app->user->isGuest);die;
+        if (!Yii::$app->user->isGuest)
+            return parent::find()->where(['user_id' => Yii::$app->user->identity->id]);
+
         return parent::find()->where(['status' => 1]);
     }
 

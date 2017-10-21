@@ -71,6 +71,7 @@ class JobController extends MainController
 
         $params = Yii::$app->request->bodyParams;
         $model->load(['Job' => $params]);
+        $model->status = 0;
         if (!$model->validate() || !$model->save()) {
             $errors = [];
             foreach ($model->getErrors() as $key => $value) {
