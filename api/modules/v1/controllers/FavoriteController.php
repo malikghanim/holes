@@ -60,8 +60,16 @@ class FavoriteController extends MainController
 
     public function actionCreate()
     {
+        if (Yii::$app->request->post('from_ad',false))
+            $request = [
+                'package_id' => \common\models\Package::findOne(['title' => 'From Add Package'])->id,
+                'job_id' => Yii::$app->request->post('job_id')
+            ];
+        else
+            $request = Yii::$app->request->post();
+
         $model = new Favorite();
-        $model->load(['Favorite' => Yii::$app->request->post()]);
+        $model->load(['Favorite' => $request]);
         $sql = 'SELECT * FROM Favorite 
                 WHERE job_id=:job_id AND active=1';
 
@@ -80,6 +88,12 @@ class FavoriteController extends MainController
 
         if (!$model->validate() || !$model->save())
             return ['status' => 400, 'errors' => $model->getErrors()];
+
+        if (Yii::$app->request->post('from_ad',false)){
+            $model->active = 1;
+            $model->save();
+        }
+
 
         // var_dump(Yii::$app->user->identity->email);die;
         /*Yii::$app->mailer->setTransport([
