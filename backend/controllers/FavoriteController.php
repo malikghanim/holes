@@ -73,6 +73,7 @@ class FavoriteController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'packages' => \common\models\Package::find()->all()
             ]);
         }
     }

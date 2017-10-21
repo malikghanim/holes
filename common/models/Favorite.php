@@ -113,6 +113,33 @@ class Favorite extends \yii\db\ActiveRecord
                 $this->job->save();
             }
 
+            if (!empty($this->job->fav_end_date) && 
+                !empty($this->job->fav_start_date) &&
+                $this->active != 1
+            ) {
+                $this->job->favorite = 0;
+                $this->job->weight = 0;
+                $this->job->fav_start_date = $this->start_date;
+                $this->job->fav_end_date = $this->end_date;
+                $this->job->save();
+            }
+
+            if (!empty($this->job->fav_end_date) && 
+                !empty($this->job->fav_start_date) && 
+                (int)$this->job->fav_end_date > (int)date('U') && 
+                $this->active == 1
+            ) {
+                $fav = Favorite::findOne([
+                    'start_date' => $this->job->fav_start_date,
+                    'end_date' => $this->job->fav_end_date
+                ]);
+                if (!empty($fav)) {
+                    $this->job->favorite = 1;
+                    $this->job->weight = $fav->weight;
+                    $this->job->save();
+                }
+            }
+
             return true;
         } else {
             return false;

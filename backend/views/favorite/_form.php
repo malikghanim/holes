@@ -13,21 +13,22 @@ foreach ($packages as $pkg) {
 ?>
 <div class="favorite-view">
 
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            [                      // the owner name of the model
-                'label' => 'Job Title',
-                'value' => $model->job->title,
+    <?php if (!empty($model->job)): ?>
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                [                      // the owner name of the model
+                    'label' => 'Job Title',
+                    'value' => $model->job->title,
+                ],
+                [                      // the owner name of the model
+                    'label' => 'User',
+                    'value' => $model->user->email,
+                ],
+                'weight'
             ],
-            [                      // the owner name of the model
-                'label' => 'User',
-                'value' => $model->user->email,
-            ],
-            'weight'
-        ],
-    ]) ?>
+        ]) ?>
+    <?php endif ?>
 
 </div>
 <div class="favorite-form">
@@ -41,10 +42,15 @@ foreach ($packages as $pkg) {
     <?=  $form->field($model, 'active')->dropdownList(
         common\models\Favorite::STATUSES
     )->label('Status') ?>
+    
+    <?php if (empty($model->job)): ?>
+        <?= $form->field($model, 'job_id')->textInput() ?>
+    <?php endif ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
+
 
     <?php ActiveForm::end(); ?>
 
