@@ -149,10 +149,6 @@ class Job extends \yii\db\ActiveRecord
         $data = [];
         foreach ($this->getAttributes() as $key => $value) {
             if($key == 'user_id'){
-                $data['available'] = function(){
-                    return true;
-                };
-
                 $data['userinfo'] = function(){
                     return $this->user;
                 };
@@ -167,6 +163,19 @@ class Job extends \yii\db\ActiveRecord
 
                 $data['category_name'] = function(){
                     return $this->category->name;
+                };
+            }
+
+            if ($key == 'category_id') {
+                $data['available'] = function(){
+                    $today = new \DateTime("now", new \DateTimeZone('Asia/Amman') );
+                    $start = \DateTime::createFromFormat('H:i', $this->working_from);
+                    $end = \DateTime::createFromFormat('H:i', $this->working_to);
+                    $curr = \DateTime::createFromFormat('H:i', $today->format('H:i'));
+                    if (($start < $curr) && ($curr < $end))
+                        return true;
+                    else
+                        return false;
                 };
             }
 
