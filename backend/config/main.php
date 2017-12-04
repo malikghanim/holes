@@ -51,4 +51,5 @@ return [
         ],
     ],
     'params' => $params,
+    'timeZone' => 'Asia/Amman',
 ];
