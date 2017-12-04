@@ -113,7 +113,7 @@ class Favorite extends \yii\db\ActiveRecord
                 $this->job->save();
             }
 
-            if ($this->job->favorite = 1 &&
+            if ($this->job->favorite == 1 &&
                 $this->active != 1
             ) {
                 $this->job->favorite = 0;

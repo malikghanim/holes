@@ -273,18 +273,21 @@ class Job extends \yii\db\ActiveRecord
     public function afterFind()
     {
         if ($this->favorite == 1 && (int)$this->fav_end_date < (int)date('U')) {
+            
+            $this->favorite = 0;
+            $this->weight = 0;
+            $this->save();
+            
             $fav = Favorite::findOne([
                 'weight' => $this->weight,
                 'start_date' => $this->fav_start_date,
                 'end_date' => $this->fav_end_date
             ]);
+
             if (!empty($fav)) {
                 $fav->active = 3;
                 $fav->save();
             }
-            $this->favorite = 0;
-            $this->weight = 0;
-            $this->save();
         }
 
         parent::afterFind();
