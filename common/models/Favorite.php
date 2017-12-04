@@ -107,6 +107,7 @@ class Favorite extends \yii\db\ActiveRecord
                 $this->end_date = $date->format('U');
                 // Update Job
                 $this->job->favorite = 1;
+                var_dump($this->package->weight);die;
                 $this->job->weight = $this->package->weight;
                 $this->job->fav_start_date = $this->start_date;
                 $this->job->fav_end_date = $this->end_date;
