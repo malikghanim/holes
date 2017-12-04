@@ -96,10 +96,10 @@ class Favorite extends \yii\db\ActiveRecord
                 $this->user_id = $this->job->user->id;
             }
 
-            if (empty($this->start_date) && $this->active == 1)
+            if ($this->active == 1)
                 $this->start_date = date('U');
 
-            if (empty($this->end_date) && $this->active == 1) {
+            if ($this->active == 1) {
                 $date = new \DateTime();
                 $timeFlag = ($this->package->duaration_unit == 'H')? 'T':'';
                 $interval = new \DateInterval("P{$timeFlag}{$this->package->duration}{$this->package->duaration_unit}");
@@ -113,8 +113,7 @@ class Favorite extends \yii\db\ActiveRecord
                 $this->job->save();
             }
 
-            if (!empty($this->job->fav_end_date) && 
-                !empty($this->job->fav_start_date) &&
+            if ($this->job->favorite = 1 &&
                 $this->active != 1
             ) {
                 $this->job->favorite = 0;
@@ -124,7 +123,7 @@ class Favorite extends \yii\db\ActiveRecord
                 $this->job->save();
             }
 
-            if (!empty($this->job->fav_end_date) && 
+            /*if (!empty($this->job->fav_end_date) && 
                 !empty($this->job->fav_start_date) && 
                 (int)$this->job->fav_end_date > (int)date('U') && 
                 $this->active == 1
@@ -138,7 +137,7 @@ class Favorite extends \yii\db\ActiveRecord
                     $this->job->weight = $fav->weight;
                     $this->job->save();
                 }
-            }
+            }*/
 
             return true;
         } else {
