@@ -49,5 +49,6 @@ return [
         'gii' => [
             'class' => 'yii\gii\Module',
         ],
-    ]
+    ],
+    'timeZone' => 'Asia/Amman',
 ];

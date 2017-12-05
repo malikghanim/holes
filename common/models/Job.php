@@ -168,89 +168,18 @@ class Job extends \yii\db\ActiveRecord
 
             if ($key == 'category_id') {
                 $data['available'] = function(){
-                    // $today = new \DateTime("now", new \DateTimeZone('Asia/Amman') );
+                    $today = new \DateTime("now");
+                    $start = \DateTime::createFromFormat('H:i', $this->working_from);
+                    $end = \DateTime::createFromFormat('H:i', $this->working_to);
+                    $curr = \DateTime::createFromFormat('H:i', $today->format('H:i'));
 
-                    // $start = \DateTime::createFromFormat('H:i', $this->working_from);
-                    // $start = date('h:i A', strtotime($start->format('H:i')));
-                    // $startArry = explode(' ', $start);
-                    // $startTimeArray = explode(':', $startArry[0]);
-                    // $start = [
-                    //     'h' => (int)$startTimeArray[0],
-                    //     'i' => (int)$startTimeArray[1],
-                    //     'p' => $startArry[1],
-                    //     'pw' => ($startArry[1] == 'AM')? 0:12
-                    // ];
+                    if ($start > $end)
+                        $start = $start->modify('-1 day');
 
-                    // $end = \DateTime::createFromFormat('H:i', $this->working_to);
-                    // $end = date('h:i A', strtotime($end->format('H:i')));
-                    // $endArry = explode(' ', $end);
-                    // $endTimeArray = explode(':', $endArry[0]);
-                    // $end = [
-                    //     'h' => (int)$endTimeArray[0],
-                    //     'i' => (int)$endTimeArray[1],
-                    //     'p' => $endArry[1],
-                    //     'pw' => ($endArry[1] == 'AM')? 0:12
-                    // ];
-
-                    // $curr = \DateTime::createFromFormat('H:i', $today->format('H:i'));
-                    // $curr = date('h:i A', strtotime($curr->format('H:i')));
-                    // $currArry = explode(' ', $curr);
-                    // $currTimeArray = explode(':', $currArry[0]);
-                    // $curr = [
-                    //     'h' => (int)$currTimeArray[0],
-                    //     'i' => (int)$currTimeArray[1],
-                    //     'p' => $currArry[1],
-                    //     'pw' => ($currArry[1] == 'AM')? 0:12
-                    // ];
-
-                    // $start['count'] = ($start['pw'] + $start['h'] + (($start['i']+1)/100));
-                    // $end['count'] = ($end['pw'] + $end['h'] + (($end['i']+1)/100));
-
-                    // $curr['count'] = (($curr['pw'] < $start['pw'])? 12:0) + $curr['h'] + (($curr['i']+1)/100);
-
-                    // $curr['started'] = ( ($curr['count'] > $start['count'] && $start['pw'] == $end['pw']) ||  ($curr['count'] < $start['count'] && $start['pw'] > $end['pw']));
-
-                    // $curr['ended'] = ( ($curr['count'] > $end['count'] && $start['pw'] == $end['pw']) || $curr['count'] < $end['count'] && $start['pw'] > $end['pw']);
-
-                    // $started = false;
-                    // $ended = false;
-                    // if ($start['pw']==$end['pw'] && $end['pw']==$curr['pw'] && 
-                    //     $start['count'] < $end['count'] && 
-                    //     $curr['count'] > $start['count']
-                    // ) {
-                    //     $started = true;
-                    // }
-
-                    // if ($start['pw']==$end['pw'] && $end['pw']==$curr['pw'] && 
-                    //     $start['count'] > $end['count'] && 
-                    //     $curr['count'] < $end['count']
-                    // ) {
-                    //     $ended = true;
-                    // }
-
-                    // if ($start['pw']<$end['pw'] && 
-                    //     $start['count'] > $end['count'] && 
-                    //     $curr['count'] < $end['count']
-                    // ) {
-                    //     $ended = true;
-                    // }
-
-                    // // $startDef = $curr->diff($start);
-                    // // $endDef = $curr->diff($end);
-                    // // $workingHours = $start->diff($end);
-
-                    // return [
-                    //     'started' => $started,
-                    //     'ended' => $ended
-                    // ];
-
-
-
-                    // if ()
-                    //     return true;
-                    // else
-                    //     return false;
-                    return true;
+                    if ($curr > $start && $curr < $end)
+                        return true;
+                    else
+                        return false;
                 };
             }
 
