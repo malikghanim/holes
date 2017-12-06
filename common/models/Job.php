@@ -201,6 +201,13 @@ class Job extends \yii\db\ActiveRecord
 
     public function afterFind()
     {
+        // $fav = Favorite::findOne([
+        //         'weight' => $this->weight,
+        //         'start_date' => $this->fav_start_date,
+        //         'end_date' => $this->fav_end_date
+        //     ]);
+        // var_dump($fav);die;
+
         if ($this->favorite == 1 && (int)$this->fav_end_date < (int)date('U')) {
             
             $this->favorite = 0;
@@ -208,7 +215,6 @@ class Job extends \yii\db\ActiveRecord
             $this->save();
             
             $fav = Favorite::findOne([
-                'weight' => $this->weight,
                 'start_date' => $this->fav_start_date,
                 'end_date' => $this->fav_end_date
             ]);
