@@ -23,6 +23,11 @@ use yii\behaviors\TimestampBehavior;
 class Package extends \yii\db\ActiveRecord
 {
     const DURATION_UNITS = ['H' => 'Hour', 'D' => 'Day', 'M' => 'Month', 'Y' => 'Year'];
+    const VISIBILITY = [
+        0 => 'No', 
+        1 => 'Yes'
+    ];
+
     /**
      * @inheritdoc
      */
@@ -50,6 +55,7 @@ class Package extends \yii\db\ActiveRecord
             [['title'], 'string', 'max' => 100],
             [['description'], 'string', 'max' => 255],
             [['duaration_unit'], 'string', 'max' => 20],
+            [['visible'],'default', 'value' => 1]
         ];
     }
 
@@ -66,9 +72,17 @@ class Package extends \yii\db\ActiveRecord
             'duration' => Yii::t('app', 'Duration'),
             'duaration_unit' => Yii::t('app', 'Duaration Unit'),
             'weight' => Yii::t('app', 'Weight'),
+            'visible' => Yii::t('app', 'Visible'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
+    }
+
+    public static function find() {
+        if(Yii::$app->controllerNamespace == 'backend\controllers')
+            return parent::find();
+
+        return parent::find()->where(['visible' => 1]);;
     }
 
     /**

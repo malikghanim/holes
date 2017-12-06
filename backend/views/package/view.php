@@ -37,6 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => $model->getAttributeLabel('duaration_unit'),
                 'value' => common\models\Package::DURATION_UNITS[$model->duaration_unit],
             ],
+            [                      // the owner name of the model
+                'label' => $model->getAttributeLabel('visible'),
+                'value' => common\models\Package::VISIBILITY[$model->visible],
+            ],
             // 'duaration_unit',
             'weight',
             'created_at',

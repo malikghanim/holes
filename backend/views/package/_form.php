@@ -27,6 +27,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'weight')->textInput() ?>
 
+    <?=  $form->field($model, 'visible')->dropdownList(
+        common\models\Package::VISIBILITY
+    )->label('Visible') ?>
+
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>

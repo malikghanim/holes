@@ -50,6 +50,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     return common\models\Package::DURATION_UNITS[$data->duaration_unit];
                 }
             ],
+            [
+                'class' => DataColumn::className(), // this line is optional
+                'headerOptions' => ['style' => 'width:15%'],
+                'attribute' => 'visible',
+                'filter'=> common\models\Package::VISIBILITY,
+                'format' => 'text',
+                'label' => 'Visible',
+                'value' => function($data){
+                    return common\models\Package::VISIBILITY[$data->visible];
+                }
+            ],
             // 'weight',
             // 'created_at',
             // 'updated_at',
