@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * JobController implements the CRUD actions for Job model.
  */
-class JobController extends Controller
+class JobController extends MainController
 {
     /**
      * @inheritdoc

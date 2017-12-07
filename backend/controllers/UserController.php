@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * UserController implements the CRUD actions for User model.
  */
-class UserController extends Controller
+class UserController extends MainController
 {
     /**
      * @inheritdoc
@@ -64,6 +64,21 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new User();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->pass = Yii::$app->request->post('User')['pass'];
+            $model->pass_repeat = Yii::$app->request->post('User')['pass_repeat'];
+
+            if (empty(trim($model->pass))) {
+                return $this->redirect(['user/create']);
+            }
+            if ($model->pass != $model->pass_repeat) {
+                return $this->redirect(['user/create']);
+            }
+            
+            $model->setPassword($model->pass);
+            $model->generateAuthKey();
+
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -71,6 +86,7 @@ class UserController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'operation' => 'create'
         ]);
     }
 
@@ -90,6 +106,7 @@ class UserController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'operation' => 'update'
         ]);
     }
 

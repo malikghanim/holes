@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * PackageController implements the CRUD actions for Package model.
  */
-class PackageController extends Controller
+class PackageController extends MainController
 {
     /**
      * @inheritdoc

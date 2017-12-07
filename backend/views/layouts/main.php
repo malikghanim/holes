@@ -52,6 +52,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Jobs', 'url' => ['/job']];
         $menuItems[] = ['label' => 'Packages', 'url' => ['/package']];
         $menuItems[] = ['label' => 'Favorite', 'url' => ['/favorite']];
+        $menuItems[] = ['label' => 'Change Password', 'url' => ['/security']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(

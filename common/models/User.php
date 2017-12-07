@@ -38,11 +38,21 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
     const ROLE_ADMIN = 11;
     const ROLE_USER_STRING ='admin';
     const ROLE_ADMIN_STRING ='user';
+    const ROLES = [
+        10 => 'User',
+        11 => 'Admin',
+    ];
+    const USER_STATUSES = [
+        10 => 'Active',
+        20 => 'Suspended',
+    ];
 
     //to be used only for new social users
     public $social_new;
     public $access_token;
     public $new_record;
+    public $pass;
+    public $pass_repeat;
 
     /**
      * @inheritdoc
@@ -68,6 +78,7 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
     public function rules()
     {
         return [
+            [['username','email'], 'safe'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED, self::STATUS_SUSPENDED]],
             ['role', 'default', 'value' => self::ROLE_USER],

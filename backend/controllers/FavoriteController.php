@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * FavoriteController implements the CRUD actions for Favorite model.
  */
-class FavoriteController extends Controller
+class FavoriteController extends MainController
 {
     /**
      * @inheritdoc

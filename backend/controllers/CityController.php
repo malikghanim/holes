@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * CityController implements the CRUD actions for City model.
  */
-class CityController extends Controller
+class CityController extends MainController
 {
     /**
      * @inheritdoc

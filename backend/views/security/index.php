@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 
-$this->title = Yii::t('app', 'Update User: {nameAttribute}', [
+$this->title = Yii::t('app', 'Change Password: {nameAttribute}', [
     'nameAttribute' => $model->id,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
@@ -17,8 +17,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,
-        'operation' => $operation
+        'model' => $model
     ]) ?>
 
 </div>

@@ -83,6 +83,14 @@ class LoginForm extends Model
         $this->username = strtolower($this->email);
         if ($this->_user === null) {
             $this->_user = User::findByUsername(strtolower($this->username));
+            if (empty($this->_user))
+                $this->_user = User::findByEmail(strtolower($this->email));
+
+            if (!empty($this->_user) && $this->_user->role != User::ROLE_ADMIN && Yii::$app->controllerNamespace == 'backend\controllers') {
+                $this->_user = null;
+                return null;
+            }
+
             if ($this->_user !== Null) {
                 $this->first_name = !is_null($this->_user->first_name) ? $this->_user->first_name : NULL;
                 $this->last_name = !is_null($this->_user->last_name) ? $this->_user->last_name : NULL;
