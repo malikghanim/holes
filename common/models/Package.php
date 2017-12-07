@@ -79,7 +79,12 @@ class Package extends \yii\db\ActiveRecord
     }
 
     public static function find() {
-        if(Yii::$app->controllerNamespace == 'backend\controllers')
+        if(
+            Yii::$app->controllerNamespace == 'backend\controllers' || 
+            (Yii::$app->controllerNamespace == 'api\controllers' && 
+            Yii::$app->controller->id == 'favorite' && 
+            Yii::$app->controller->action->id == 'create')
+        )
             return parent::find();
 
         return parent::find()->where(['visible' => 1]);;
