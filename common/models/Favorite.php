@@ -97,6 +97,7 @@ class Favorite extends \yii\db\ActiveRecord
             }
 
             if ($this->active == 1) {
+                var_dump('expression');die;
                 $date = new \DateTime();
                 $timeFlag = ($this->package->duaration_unit == 'H')? 'T':'';
                 $interval = new \DateInterval("P{$timeFlag}{$this->package->duration}{$this->package->duaration_unit}");
@@ -116,6 +117,7 @@ class Favorite extends \yii\db\ActiveRecord
             if ($this->job->favorite == 1 &&
                 $this->active != 1
             ) {
+                var_dump('expression');die;
                 $this->job->favorite = 0;
                 $this->job->weight = 0;
                 $this->job->fav_start_date = $this->start_date;
