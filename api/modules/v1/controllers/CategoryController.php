@@ -91,26 +91,29 @@ class CategoryController extends Controller
             ];
         }
 
-        $result = [];
-        foreach ($cat as $category) {
-            $result[] = $this->handleCat($category);
-        }
-
         $this->status = 200;
-        return $result;
+        return $this->handleCat($cat);
     }
 
-    private function handleCat($cat){
-        if (empty($cat['sub_categories']))
-            return ['id' => $cat['id'], 'name' => $cat['name']];
+    private function handleCat($cat, $path=null){
+        $subCat = [];
+        foreach ($cat as $ct) {
+            if (empty($ct['is_active']))
+                continue;
 
-        foreach ($cat['sub_categories'] as $ct) {
-            // return $this->handleCat($ct);
-            $res = $this->handleCat($ct);
-            if ((!empty($cat['sub_categories'])))
-                $res['name'] = $cat['name'].'/'.$res['name'];
-            return ['id' => $res['id'], 'name' => $res['name']];
+            if ((empty($ct['sub_categories']))) {
+                $subCat[] = [
+                    'id' => $ct['id'],
+                    'name' => ((empty($path))? $ct['name']: $path.'/'.$ct['name'])
+                ];
+            }else{
+                $res = $this->handleCat($ct['sub_categories'], (empty($path))? $ct['name']: $path.'/'.$ct['name']);
+                $subCat = array_merge($subCat,$res);
+            }
+
         }
+
+        return $subCat;
     }
 
     public function actionIndex($category_id)

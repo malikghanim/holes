@@ -8,7 +8,7 @@ use yii\authclient\widgets\AuthChoice;
 
 $this->beginPage();
 
-$this->title = 'Sign Up';
+$this->title = 'Maqtoo3: Sign Up';
 ?>
 
 <!DOCTYPE html>

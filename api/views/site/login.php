@@ -10,7 +10,7 @@ use yii\authclient\widgets\AuthChoice;
 use yii\common\models\LoginForm;
 
 $this->beginPage();
-$this->title = 'Sign In';
+$this->title = 'Maqtoo3: Sign In';
 ?>
 
 <!DOCTYPE html>

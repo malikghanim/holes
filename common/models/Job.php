@@ -170,13 +170,14 @@ class Job extends \yii\db\ActiveRecord
                 $data['available'] = function(){
                     $today = new \DateTime("now");
                     $start = \DateTime::createFromFormat('H:i', $this->working_from);
+
                     $end = \DateTime::createFromFormat('H:i', $this->working_to);
                     $curr = \DateTime::createFromFormat('H:i', $today->format('H:i'));
 
-                    if ($start > $end)
-                        $start = $start->modify('-1 day');
+                    if ($start >= $end)
+                        $end = $end->modify('+1 day');
 
-                    if ($curr > $start && $curr < $end)
+                    if ($curr >= $start && $curr <= $end)
                         return true;
                     else
                         return false;
@@ -208,12 +209,16 @@ class Job extends \yii\db\ActiveRecord
         //     ]);
         // var_dump($fav);die;
 
-        if ($this->favorite == 1 && (int)$this->fav_end_date < (int)date('U')) {
+        if ($this->favorite == 1 && 
+            (int)$this->fav_end_date < (int)date('U')
+        ) {
             
             $this->favorite = 0;
             $this->weight = 0;
             $this->save();
-            
+        }
+
+        if ($this->favorite != 1) {
             $fav = Favorite::findOne([
                 'start_date' => $this->fav_start_date,
                 'end_date' => $this->fav_end_date
