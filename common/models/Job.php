@@ -225,11 +225,6 @@ class Job extends \yii\db\ActiveRecord
                 'end_date' => $this->fav_end_date
             ]);
 
-            // if ($fav->active == 3) {
-            //     var_dump($fav->getAttributes());
-            //     var_dump('XXXXX');die;
-            // }
-
             if (!empty($fav) && $fav->active != 3) {
                 $fav->active = 3;
                 $fav->save();

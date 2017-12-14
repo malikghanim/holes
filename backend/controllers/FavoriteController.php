@@ -68,7 +68,36 @@ class FavoriteController extends MainController
     {
         $model = new Favorite();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->user_id = $model->job->user->id;
+            if ($model->active == 1) {
+                $date = new \DateTime();
+                $timeFlag = ($model->package->duaration_unit == 'H')? 'T':'';
+                $interval = new \DateInterval("P{$timeFlag}{$model->package->duration}{$model->package->duaration_unit}");
+                $date->add($interval);
+                
+                $model->start_date = date('U');
+                $model->weight = $model->package->weight;
+                $model->end_date = $date->format('U');
+                // Update Job
+                $model->job->favorite = 1;
+                $model->job->weight = $model->package->weight;
+                $model->job->fav_start_date = $model->start_date;
+                $model->job->fav_end_date = $model->end_date;
+                $model->job->save();
+            }
+
+            if ($model->job->favorite == 1 &&
+                $model->active != 1
+            ) {
+                $model->job->favorite = 0;
+                $model->job->weight = 0;
+                $model->job->fav_start_date = $model->start_date;
+                $model->job->fav_end_date = $model->end_date;
+                $model->job->save();
+            }
+
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -88,7 +117,37 @@ class FavoriteController extends MainController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->user_id = $model->job->user->id;
+            if ($model->active == 1) {
+                $date = new \DateTime();
+                $timeFlag = ($model->package->duaration_unit == 'H')? 'T':'';
+                $interval = new \DateInterval("P{$timeFlag}{$model->package->duration}{$model->package->duaration_unit}");
+                $date->add($interval);
+                
+                $model->start_date = date('U');
+                $model->weight = $model->package->weight;
+                $model->end_date = $date->format('U');
+                // Update Job
+                $model->job->favorite = 1;
+                $model->job->weight = $model->package->weight;
+                $model->job->fav_start_date = $model->start_date;
+                $model->job->fav_end_date = $model->end_date;
+                $model->job->save();
+            }
+
+            if ($model->job->favorite == 1 &&
+                $model->active != 1
+            ) {
+                $model->job->favorite = 0;
+                $model->job->weight = 0;
+                $model->job->fav_start_date = $model->start_date;
+                $model->job->fav_end_date = $model->end_date;
+                $model->job->save();
+            }
+
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             $packages = \common\models\Package::find()->all();

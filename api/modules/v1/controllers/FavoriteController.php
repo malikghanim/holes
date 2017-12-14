@@ -85,13 +85,29 @@ class FavoriteController extends MainController
             ];
 
         $model->weight = $model->package->weight;
+        $model->user_id = Yii::$app->user->identity->id;
 
         if (!$model->validate() || !$model->save())
             return ['status' => 400, 'errors' => $model->getErrors()];
 
         if (Yii::$app->request->post('from_ad',false)){
             $model->active = 1;
-            $model->save();
+            if ($model->save()) {
+                $date = new \DateTime();
+                $timeFlag = ($model->package->duaration_unit == 'H')? 'T':'';
+                $interval = new \DateInterval("P{$timeFlag}{$model->package->duration}{$model->package->duaration_unit}");
+                $date->add($interval);
+                
+                $model->start_date = date('U');
+                $model->weight = $model->package->weight;
+                $model->end_date = $date->format('U');
+                // Update Job
+                $model->job->favorite = 1;
+                $model->job->weight = $model->package->weight;
+                $model->job->fav_start_date = $model->start_date;
+                $model->job->fav_end_date = $model->end_date;
+                $model->job->save();
+            }
         }
 
 

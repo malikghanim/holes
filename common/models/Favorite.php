@@ -90,65 +90,6 @@ class Favorite extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert) {
-        if (parent::beforeSave($insert)) {
-            if ($insert) {
-                var_dump('expression');die;
-                $this->user_id = $this->job->user->id;
-            }
-
-            if ($this->active == 1) {
-                var_dump('expression11111');die;
-                $date = new \DateTime();
-                $timeFlag = ($this->package->duaration_unit == 'H')? 'T':'';
-                $interval = new \DateInterval("P{$timeFlag}{$this->package->duration}{$this->package->duaration_unit}");
-                $date->add($interval);
-                
-                $this->start_date = date('U');
-                $this->weight = $this->package->weight;
-                $this->end_date = $date->format('U');
-                // Update Job
-                $this->job->favorite = 1;
-                $this->job->weight = $this->package->weight;
-                $this->job->fav_start_date = $this->start_date;
-                $this->job->fav_end_date = $this->end_date;
-                $this->job->save();
-            }
-
-            if ($this->job->favorite == 1 &&
-                $this->active != 1
-            ) {
-                var_dump('expression2222');die;
-                $this->job->favorite = 0;
-                $this->job->weight = 0;
-                $this->job->fav_start_date = $this->start_date;
-                $this->job->fav_end_date = $this->end_date;
-                $this->job->save();
-            }
-
-            /*if (!empty($this->job->fav_end_date) && 
-                !empty($this->job->fav_start_date) && 
-                (int)$this->job->fav_end_date > (int)date('U') && 
-                $this->active == 1
-            ) {
-                $fav = Favorite::findOne([
-                    'start_date' => $this->job->fav_start_date,
-                    'end_date' => $this->job->fav_end_date
-                ]);
-                if (!empty($fav)) {
-                    $this->job->favorite = 1;
-                    $this->job->weight = $fav->weight;
-                    $this->job->save();
-                }
-            }*/
-
-            return true;
-        } else {
-            var_dump('expression3333333');die;
-            return false;
-        }
-    }
-
     /**
      * @return \yii\db\ActiveQuery
      */
