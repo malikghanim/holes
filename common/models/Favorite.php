@@ -154,6 +154,7 @@ class Favorite extends \yii\db\ActiveRecord
      */
     public function getJob()
     {
+        var_dump('getJob');die;
         return $this->hasOne(Job::className(), ['id' => 'job_id']);
     }
 
