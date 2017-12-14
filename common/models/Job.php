@@ -208,6 +208,7 @@ class Job extends \yii\db\ActiveRecord
         //         'end_date' => $this->fav_end_date
         //     ]);
         // var_dump($fav);die;
+        parent::afterFind();
 
         if ($this->favorite == 1 && 
             (int)$this->fav_end_date < (int)date('U')
@@ -225,13 +226,11 @@ class Job extends \yii\db\ActiveRecord
             ]);
 
             if (!empty($fav)) {
-                var_dump('expression');die;
                 $fav->active = 3;
                 $fav->save();
             }
         }
 
-        parent::afterFind();
     }
 
     /**
