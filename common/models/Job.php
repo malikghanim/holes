@@ -225,6 +225,7 @@ class Job extends \yii\db\ActiveRecord
             ]);
 
             if (!empty($fav)) {
+                var_dump('expression');die;
                 $fav->active = 3;
                 $fav->save();
             }
