@@ -81,7 +81,7 @@ class FavoriteController extends MainController
         if (!empty($checkFav))
             return [
                 'status' => 400,
-                'message' => 'Your Favorite add already submited!'
+                'message' => 'هذا العمل مدرج كإعلان مميز!'
             ];
 
         $model->weight = $model->package->weight;
@@ -131,7 +131,7 @@ class FavoriteController extends MainController
 
         return [
             'status' => 200,
-            'message' => 'your request submitted successfully!'
+            'message' => 'سيتم التواصل معك من قبل الإدارة, شكرا لك.!'
         ];
     }
 
