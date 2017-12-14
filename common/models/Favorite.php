@@ -93,10 +93,12 @@ class Favorite extends \yii\db\ActiveRecord
     public function beforeSave($insert) {
         if (parent::beforeSave($insert)) {
             if ($insert) {
+                var_dump('expression');die;
                 $this->user_id = $this->job->user->id;
             }
 
             if ($this->active == 1) {
+                var_dump('expression11111');die;
                 $date = new \DateTime();
                 $timeFlag = ($this->package->duaration_unit == 'H')? 'T':'';
                 $interval = new \DateInterval("P{$timeFlag}{$this->package->duration}{$this->package->duaration_unit}");
@@ -116,6 +118,7 @@ class Favorite extends \yii\db\ActiveRecord
             if ($this->job->favorite == 1 &&
                 $this->active != 1
             ) {
+                var_dump('expression2222');die;
                 $this->job->favorite = 0;
                 $this->job->weight = 0;
                 $this->job->fav_start_date = $this->start_date;
@@ -141,6 +144,7 @@ class Favorite extends \yii\db\ActiveRecord
 
             return true;
         } else {
+            var_dump('expression3333333');die;
             return false;
         }
     }
