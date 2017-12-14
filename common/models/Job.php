@@ -226,6 +226,7 @@ class Job extends \yii\db\ActiveRecord
             ]);
 
             if ($fav->active == 3) {
+                var_dump($fav->getAttributes());
                 var_dump('XXXXX');die;
             }
 
