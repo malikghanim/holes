@@ -8,6 +8,8 @@ use common\models\FavoriteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\Job;
+use common\models\Package;
 
 /**
  * FavoriteController implements the CRUD actions for Favorite model.
@@ -38,7 +40,7 @@ class FavoriteController extends MainController
         $searchModel = new FavoriteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $packages = \common\models\Package::find()->all();
+        $packages = Package::find()->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -97,12 +99,19 @@ class FavoriteController extends MainController
                 $model->job->save();
             }
 
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
+            else{
+                foreach ($model->errors as $key => $value) {
+                    Yii::$app->session->setFlash('error', "{$key}: {$value[0]}");
+                }
+                return $this->redirect(['create', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'packages' => \common\models\Package::find()->all()
+                'packages' => Package::find()->all(),
+                'jobs' => Job::find()->where(['status' => 1])->all()
             ]);
         }
     }
@@ -147,8 +156,14 @@ class FavoriteController extends MainController
                 $model->job->save();
             }
 
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
+            else{
+                foreach ($model->errors as $key => $value) {
+                    Yii::$app->session->setFlash('error', "{$key}: {$value[0]}");
+                }
+                return $this->redirect(['update', 'id' => $model->id]);
+            }
         } else {
             $packages = \common\models\Package::find()->all();
             return $this->render('update', [

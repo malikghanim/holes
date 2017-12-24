@@ -70,6 +70,9 @@ class JobController extends MainController
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'categories' => $this->getFilteredCategories(),
+                'countries' => \common\models\Country::findOne(['JOR']),
+                'cities' => \common\models\City::find()->where(['CountryCode' => 'JOR'])->all()
             ]);
         }
     }
@@ -90,8 +93,40 @@ class JobController extends MainController
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'categories' => $this->getFilteredCategories(),
+                'countries' => \common\models\Country::findOne(['JOR']),
+                'cities' => \common\models\City::find()->where(['CountryCode' => 'JOR'])->all()
             ]);
         }
+    }
+
+    private function getFilteredCategories()
+    {
+        $cat = Yii::$app->getModule('categories')->getAll();
+        // var_dump($cat);die;
+        if (empty($cat)) {
+            return [];
+        }
+
+        return $this->handleCat($cat);
+    }
+
+    private function handleCat($cat, $path=null){
+        $subCat = [];
+        foreach ($cat as $ct) {
+            if (empty($ct['is_active']))
+                continue;
+
+            if ((empty($ct['sub_categories']))) {
+                $subCat[$ct['id']] = ((empty($path))? $ct['name']: $path.'/'.$ct['name']);
+            }else{
+                $res = $this->handleCat($ct['sub_categories'], (empty($path))? $ct['name']: $path.'/'.$ct['name']);
+                $subCat += $res;
+            }
+
+        }
+
+        return $subCat;
     }
 
     /**

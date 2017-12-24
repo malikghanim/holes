@@ -2,11 +2,38 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\DetailView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Job */
 /* @var $form yii\widgets\ActiveForm */
+$countries = (is_array($countries))? $countries: [$countries];
+$cntrys = [];
+foreach ($countries as $country) {
+    $cntrys[$country->Code] = $country->Name;
+}
+
+$cties = [];
+foreach ($cities as $city) {
+    $cties[$city->id] = $city->Name;
+}
 ?>
+<?php if (!empty($model->user_id)): ?>
+    <div class="favorite-view">
+        <?php $url = Url::to(['user/view', 'id' => $model->user_id]); ?>
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                [                      // the owner name of the model
+                    'attribute'=>'Job Owner',
+                    'format'=>'raw',
+                    'value' => Html::a($model->user->email, ['user/view', 'id' => $model->user_id], ['class' => 'profile-link']),
+                ],
+            ],
+        ]) ?>
+    </div>
+<?php endif ?>
 
 <div class="job-form">
 
@@ -26,13 +53,18 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'working_to')->textInput() ?>
 
-    <?= $form->field($model, 'category_id')->textInput() ?>
+    <?=  $form->field($model, 'category_id')->dropdownList(
+        $categories
+    )->label('Category') ?>
 
-    <?= $form->field($model, 'CountryCode')->textInput(['maxlength' => true]) ?>
+    <?=  $form->field($model, 'CountryCode')->dropdownList(
+        $cntrys
+    )->label('Country') ?>
 
-    <?= $form->field($model, 'city_id')->textInput() ?>
+    <?=  $form->field($model, 'city_id')->dropdownList(
+        $cties
+    )->label('City') ?>
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

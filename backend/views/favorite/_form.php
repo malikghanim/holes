@@ -10,7 +10,9 @@ $pkgs = [];
 foreach ($packages as $pkg) {
     $pkgs[$pkg->id] = $pkg->title;
 }
+
 ?>
+
 <div class="favorite-view">
 
     <?php if (!empty($model->job)): ?>
@@ -44,7 +46,15 @@ foreach ($packages as $pkg) {
     )->label('Status') ?>
     
     <?php if (empty($model->job)): ?>
-        <?= $form->field($model, 'job_id')->textInput() ?>
+        <?php
+        $alljobs = [];
+        foreach ($jobs as $job) {
+            $alljobs[$job->id] = $job->title;
+        }
+        ?>
+        <?=  $form->field($model, 'job_id')->dropdownList(
+            $alljobs
+        )->label('Job') ?>
     <?php endif ?>
 
     <div class="form-group">

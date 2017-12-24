@@ -42,7 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'category_id',
             'CountryCode',
             'city_id',
-            'user_id',
+            [
+                'attribute'=>'Owner',
+                'format'=>'raw',
+                'value' => Html::a($model->user->email, ['user/view', 'id' => $model->user_id], ['class' => 'profile-link']),
+            ]
+            // 'user_id',
         ],
     ]) ?>
 

@@ -4,7 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
-
+use yii2tech\ar\softdelete\SoftDeleteBehavior;
 /**
  * This is the model class for table "Favorite".
  *
@@ -51,9 +51,30 @@ class Favorite extends \yii\db\ActiveRecord
             [['job_id'], 'exist', 'skipOnError' => true, 'targetClass' => Job::className(), 'targetAttribute' => ['job_id' => 'id']],
             [['package_id'], 'exist', 'skipOnError' => true, 'targetClass' => Package::className(), 'targetAttribute' => ['package_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['active'], 'default', 'value' => 0]
+            [['active'], 'default', 'value' => 0],
+            [['package_id','job_id','user_id','active'], 'filter', 'filter' => 'intval'],
+            [['is_deleted'], 'default', 'value' => false],
+            [['active'], 'validateActiveExist']
 
         ];
+    }
+
+
+    public function validateActiveExist($attribute)
+    {
+        if ($this->$attribute == 1) {
+            $activeFavorate = Favorite::find()->where([
+                'job_id' => $this->job_id,
+                'active' => 1
+            ])->all();
+
+            if (!empty($activeFavorate)) {
+                $this->addError($attribute, 'This job has an active favorate already!');
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -70,6 +91,7 @@ class Favorite extends \yii\db\ActiveRecord
             'end_date' => Yii::t('app', 'End Date'),
             'weight' => Yii::t('app', 'Weight'),
             'active' => Yii::t('app', 'Status'),
+            'is_deleted' => Yii::t('app', 'Is Deleted'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
@@ -86,8 +108,20 @@ class Favorite extends \yii\db\ActiveRecord
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
                 'value' => function() { return date('U');},
-            ]
+            ],
+            'softDeleteBehavior' => [
+                'class' => SoftDeleteBehavior::className(),
+                'softDeleteAttributeValues' => [
+                    'is_deleted' => true
+                ],
+            ],
         ];
+    }
+
+    public static function find()
+    {
+        $query = parent::find()->where(['is_deleted' => 0]);
+        return $query;
     }
 
     /**
@@ -123,5 +157,17 @@ class Favorite extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function delete() {
+        $this->job->favorite = 0;
+        $this->job->weight = 0;
+        $this->job->save();
+
+        $this->active = 3;
+        $this->save();
+
+        $this->softDelete();
+        return true;
     }
 }
