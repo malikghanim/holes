@@ -46,7 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'Owner',
                 'format'=>'raw',
                 'value' => Html::a($model->user->email, ['user/view', 'id' => $model->user_id], ['class' => 'profile-link']),
-            ]
+            ],
+            'address'
             // 'user_id',
         ],
     ]) ?>

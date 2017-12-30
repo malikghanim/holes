@@ -65,6 +65,7 @@ foreach ($cities as $city) {
         $cties
     )->label('City') ?>
 
+    <?= $form->field($model, 'address')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

@@ -50,6 +50,13 @@ foreach ($packages as $pkg) {
             'jobTitle',
             [
                 'class' => DataColumn::className(), // this line is optional
+                'headerOptions' => ['style' => 'width:30px'],
+                'attribute' => 'job.mobile',
+                'format' => 'text',
+                'label' => 'Mobile',
+            ],
+            [
+                'class' => DataColumn::className(), // this line is optional
                 'headerOptions' => ['style' => 'width:15%'],
                 'attribute' => 'user.email',
                 'format' => 'text',

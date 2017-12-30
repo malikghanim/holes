@@ -38,6 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Job Title',
                 'value' => $model->job->title,
             ],
+            [                      // the owner name of the model
+                'label' => 'Mobile',
+                'value' => $model->job->mobile,
+            ],
             // 'job_id',
             [                      // the owner name of the model
                 'label' => 'User',
