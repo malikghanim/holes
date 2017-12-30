@@ -62,7 +62,7 @@ class FavoriteController extends MainController
     {
         if (Yii::$app->request->post('from_ad',false))
             $request = [
-                'package_id' => \common\models\Package::findOne(['title' => 'From Add Package'])->id,
+                'package_id' => \common\models\Package::findOne(['title' => 'dont del'])->id,
                 'job_id' => Yii::$app->request->post('job_id')
             ];
         else
