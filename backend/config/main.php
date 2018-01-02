@@ -47,6 +47,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'GET country/list/<id:\d+>' => 'country/list/',
+                'categories/categories/delete' => 'category/delete'
             ],
         ],
     ],
