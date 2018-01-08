@@ -186,6 +186,23 @@ class FavoriteController extends MainController
         return $this->redirect(['index']);
     }
 
+    public function actionBulk()
+    {
+        $action = Yii::$app->request->post('action');
+        $selection = (array)Yii::$app->request->post('selection');//typecasting
+        if (!empty($selection) && !empty($action))
+            foreach($selection as $id){
+                $e = Favorite::findOne((int)$id);//make a typecasting
+                $e->active = $action;
+                if ($e->save())
+                    Yii::$app->session->setFlash('success', "Records saved successfully!");
+                else
+                    Yii::$app->session->setFlash('error', "Records not saved!".json_encode($e->errors));
+            }
+
+        return $this->redirect(['/favorite']);
+    }
+
     /**
      * Finds the Favorite model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

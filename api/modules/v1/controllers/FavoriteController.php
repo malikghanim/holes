@@ -60,29 +60,52 @@ class FavoriteController extends MainController
 
     public function actionCreate()
     {
-        if (Yii::$app->request->post('from_ad',false))
+        if (Yii::$app->request->post('from_ad',false)) {
+            $freePackage = \common\models\Package::findOne(['title' => 'dont del']);
+
+            if (empty($freePackage))
+                return [
+                    'status' => 400,
+                    'message' => 'ميزة الاعلانات المميزة غير متوفرة'
+                ];
+
             $request = [
-                'package_id' => \common\models\Package::findOne(['title' => 'dont del'])->id,
-                'job_id' => Yii::$app->request->post('job_id')
+                'package_id' => $freePackage->id,
+                'job_id' => Yii::$app->request->post('job_id'),
+                'user_id' => Yii::$app->user->identity->id
             ];
-        else
+        }else
             $request = Yii::$app->request->post();
 
         $model = new Favorite();
         $model->load(['Favorite' => $request]);
-        $sql = 'SELECT * FROM Favorite 
-                WHERE job_id=:job_id AND active=1';
+        $sql1 = 'SELECT * FROM Favorite 
+                WHERE job_id=:job_id AND user_id=:user_id';
+        $sql2 = 'SELECT * FROM Favorite 
+                WHERE job_id=:job_id AND user_id=:user_id  AND active=1';
 
-        $checkFav = Favorite::findBySql($sql, [
+        $checkAllFav = Favorite::findBySql($sql1, [
             ':job_id' => $model->job_id,
-            // ':package_id' => $model->package_id
+            ':user_id' => $model->user_id,
         ])->all();
 
-        if (!empty($checkFav))
+        $checkActiveFav = Favorite::findBySql($sql2, [
+            ':job_id' => $model->job_id,
+            ':user_id' => $model->user_id,
+        ])->all();
+
+        if (!empty($checkActiveFav))
             return [
                 'status' => 400,
                 'message' => 'هذا العمل مدرج كإعلان مميز!'
             ];
+
+        if (empty($checkActiveFav) && count($checkAllFav) > 2) {
+            return [
+                'status' => 400,
+                'message' => 'لقد تجاوزت الحد الاعلى للاعلانات المميزة'
+            ];
+        }
 
         $model->weight = $model->package->weight;
         $model->user_id = Yii::$app->user->identity->id;
@@ -92,15 +115,16 @@ class FavoriteController extends MainController
 
         if (Yii::$app->request->post('from_ad',false)){
             $model->active = 1;
+            $date = new \DateTime();
+            $timeFlag = ($model->package->duaration_unit == 'H')? 'T':'';
+            $interval = new \DateInterval("P{$timeFlag}{$model->package->duration}{$model->package->duaration_unit}");
+            $date->add($interval);
+            
+            $model->start_date = date('U');
+            $model->weight = $model->package->weight;
+            $model->end_date = $date->format('U');
+            
             if ($model->save()) {
-                $date = new \DateTime();
-                $timeFlag = ($model->package->duaration_unit == 'H')? 'T':'';
-                $interval = new \DateInterval("P{$timeFlag}{$model->package->duration}{$model->package->duaration_unit}");
-                $date->add($interval);
-                
-                $model->start_date = date('U');
-                $model->weight = $model->package->weight;
-                $model->end_date = $date->format('U');
                 // Update Job
                 $model->job->favorite = 1;
                 $model->job->weight = $model->package->weight;

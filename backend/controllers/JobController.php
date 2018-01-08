@@ -142,6 +142,23 @@ class JobController extends MainController
         return $this->redirect(['index']);
     }
 
+    public function actionBulk()
+    {
+        $action = Yii::$app->request->post('action');
+        $selection = (array)Yii::$app->request->post('selection');//typecasting
+        if (!empty($selection) && !empty($action))
+            foreach($selection as $id){
+                $e = Job::findOne((int)$id);//make a typecasting
+                $e->status = $action;
+                if ($e->save())
+                    Yii::$app->session->setFlash('success', "Records saved successfully!");
+                else
+                    Yii::$app->session->setFlash('error', "Records not saved!".json_encode($e->errors));
+            }
+
+        return $this->redirect(['/job']);
+    }
+
     /**
      * Finds the Job model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

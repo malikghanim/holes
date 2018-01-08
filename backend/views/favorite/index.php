@@ -26,6 +26,10 @@ foreach ($packages as $pkg) {
         <?= Html::a(Yii::t('app', 'Create Favorite'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+    <?=Html::beginForm(['favorite/bulk'],'post');?>
+    <?=Html::dropDownList('action','',array_merge([''=>'Mark selected as: '],common\models\Favorite::STATUSES),['class'=>'dropdown',])?>
+    <?=Html::submitButton('Save', ['class' => 'btn btn-info',]);?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -40,6 +44,7 @@ foreach ($packages as $pkg) {
             // 'job.title',
             // 'created_at:datetime',
             // 'updated_at',
+            ['class' => 'yii\grid\CheckboxColumn'],
             [
                 'class' => DataColumn::className(), // this line is optional
                 'headerOptions' => ['style' => 'width:1%'],
@@ -90,5 +95,7 @@ foreach ($packages as $pkg) {
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+    <?= Html::endForm();?>
+
     <?php Pjax::end(); ?>
 </div>

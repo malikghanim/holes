@@ -21,12 +21,17 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('app', 'Create Job'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+    <?=Html::beginForm(['job/bulk'],'post');?>
+    <?=Html::dropDownList('action','',array_merge([''=>'Mark selected as: '],common\models\Job::JOB_STATUS),['class'=>'dropdown',])?>
+    <?=Html::submitButton('Save', ['class' => 'btn btn-info',]);?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
 
+            ['class' => 'yii\grid\CheckboxColumn'],
             'id',
             'title',
             [
@@ -48,9 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'CountryCode',
             // 'city_id',
             // 'user_id',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+    <?= Html::endForm();?>
+
     <?php Pjax::end(); ?>
+
 </div>
