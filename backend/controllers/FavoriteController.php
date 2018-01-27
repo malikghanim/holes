@@ -194,6 +194,41 @@ class FavoriteController extends MainController
             foreach($selection as $id){
                 $e = Favorite::findOne((int)$id);//make a typecasting
                 $e->active = $action;
+
+                if ($e->active == 1) {
+                    $date = new \DateTime();
+                    $timeFlag = ($e->package->duaration_unit == 'H')? 'T':'';
+                    $interval = new \DateInterval("P{$timeFlag}{$e->package->duration}{$e->package->duaration_unit}");
+                    $date->add($interval);
+                    
+                    $e->start_date = date('U');
+                    $e->weight = $e->package->weight;
+                    $e->end_date = $date->format('U');
+                    // Update Job
+                    $e->job->favorite = 1;
+                    $e->job->weight = $e->package->weight;
+                    $e->job->fav_start_date = (int)$e->start_date;
+                    $e->job->fav_end_date = (int)$e->end_date;
+                    // var_dump($e->job);die;
+                    if (!$e->job->save()) {
+                        Yii::$app->session->setFlash('error', "Records not saved!".json_encode($e->job->errors));
+                        return $this->redirect(['/favorite']);
+                    }
+                }
+
+                if ($e->job->favorite == 1 &&
+                    $e->active != 1
+                ) {
+                    $e->job->favorite = 0;
+                    $e->job->weight = 0;
+                    $e->job->fav_start_date = $e->start_date;
+                    $e->job->fav_end_date = $e->end_date;
+                    if (!$e->job->save()) {
+                        Yii::$app->session->setFlash('error', "Records not saved!".json_encode($e->job->errors));
+                        return $this->redirect(['/favorite']);
+                    }
+                }
+
                 if ($e->save())
                     Yii::$app->session->setFlash('success', "Records saved successfully!");
                 else
